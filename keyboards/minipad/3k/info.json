@@ -1,0 +1,62 @@
+{
+  "manufacturer": "RephlexZero",
+  "keyboard_name": "MiniPad/3k",
+  "maintainer": "RephlexZero",
+  "processor": "RP2040",
+  "bootloader": "rp2040",
+  "url": "https://github.com/RephlexZero/qmk_firmware_moonpad/tree/minipad/keyboards/minipad/3k",
+  "features": {
+    "bootmagic": true,
+    "mousekey": false,
+    "extrakey": false,
+    "console": true,
+    "command": true,
+    "nkro": true,
+    "rgb_matrix": false
+  },
+  "usb": {
+    "device_version": "1.0.0",
+    "pid": "0x0727",
+    "vid": "0x0727"
+  },
+  "matrix_pins": {
+    "direct": [
+      [
+        "GP28",
+        "GP27",
+        "GP26"
+      ]
+    ]
+  },
+  "layout": "LAYOUT_ortho_1x3",
+  "layouts": {
+    "LAYOUT_ortho_1x3": {
+      "layout": [
+        {
+          "matrix": [
+            0,
+            0
+          ],
+          "x": 0,
+          "y": 0
+        },
+        {
+          "matrix": [
+            0,
+            1
+          ],
+          "x": 1,
+          "y": 0
+        },
+        {
+          "matrix": [
+            0,
+            2
+          ],
+          "x": 2,
+          "y": 0
+        }
+      ]
+    }
+  }
+}

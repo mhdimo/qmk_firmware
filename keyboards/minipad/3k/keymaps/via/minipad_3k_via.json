@@ -1,0 +1,71 @@
+{
+  "name": "MiniPad",
+  "vendorId": "0x0727",
+  "productId": "0x0727",
+  "menus": [
+    {
+      "label": "Dynamic Actuation",
+      "content": [
+        {
+          "label": "Settings",
+          "content": [
+            {
+              "label": "Mode",
+              "type": "dropdown",
+              "options": [
+                ["Dynamic Actuation", 0],
+                ["Continuous Dynamic Actuation", 1],
+                ["Static Actuation", 2],
+                ["Flashing", 3]
+              ],
+              "content": ["id_mode", 0, 1]
+            },
+            {
+              "label": "Actuation Point",
+              "type": "range",
+              "options": [0, 255],
+              "content": ["id_actuation_point", 0, 2]
+            },
+            {
+              "label": "Press Sensitivity",
+              "type": "range",
+              "options": [0, 255],
+              "content": ["id_press_sensitivity", 0, 3]
+            },
+            {
+              "label": "Release Sensitivity",
+              "type": "range",
+              "options": [0, 255],
+              "content": ["id_release_sensitivity", 0, 4]
+            },
+            {
+              "label": "Press Hysteresis",
+              "type": "range",
+              "options": [0, 64],
+              "content": ["id_press_hysteresis", 0, 5]
+            },
+            {
+              "label": "Release Hysteresis",
+              "type": "range",
+              "options": [0, 64],
+              "content": ["id_release_hysteresis", 0, 6]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "matrix": {
+    "rows": 1,
+    "cols": 3
+  },
+  "layouts": {
+    "keymap": [
+      [
+        "0,0",
+        "0,1",
+        "0,2"
+      ]
+    ]
+  }
+}
