@@ -18,7 +18,8 @@ void housekeeping_task_user(void) {
         uprintf("K1: V: %d O: %d  ", keys[0][0].value, keys[0][0].offset);
         uprintf("K2: V: %d O: %d  ", keys[0][1].value, keys[0][1].offset);
         uprintf("K3: V: %d O: %d  ", keys[0][2].value, keys[0][2].offset);
-        //uprintf("RAW %d %d %d\n", analogReadPin(matrix_pins[0][0]), analogReadPin(matrix_pins[0][1]), analogReadPin(matrix_pins[0][2]));
+        //uprintf("RAW %d %d %d  ", analogReadPin(matrix_pins[0][0]), analogReadPin(matrix_pins[0][1]), analogReadPin(matrix_pins[0][2]));
+        uprintf("\n");
     }
     i++;
 }
