@@ -1,10 +1,10 @@
 {
-  "manufacturer": "RephlexZero",
-  "keyboard_name": "rephlex/2k",
+  "manufacturer": "MiniPad",
+  "keyboard_name": "minipad/3k",
   "maintainer": "RephlexZero",
   "processor": "RP2040",
   "bootloader": "rp2040",
-  "url": "https://github.com/RephlexZero/MoonPad",
+  "url": "https://minipad.minii.moe/",
   "features": {
     "bootmagic": true,
     "mousekey": false,
@@ -18,14 +18,15 @@
   },
   "usb": {
     "device_version": "1.0.0",
-    "pid": "0x2612",
-    "vid": "0x4D4F"
+    "pid": "0x0727",
+    "vid": "0x0727"
   },
   "matrix_pins": {
     "direct": [
       [
-        "GP26",
-        "GP27"
+        "GP28",
+        "GP27",
+        "GP26"
       ]
     ]
   },
@@ -34,7 +35,8 @@
     "LAYOUT_ortho_1x3": {
       "layout": [
         { "matrix": [0, 0], "x": 0, "y": 0 },
-        { "matrix": [0, 1], "x": 1, "y": 0 }
+        { "matrix": [0, 1], "x": 1, "y": 0 },
+        { "matrix": [0, 2], "x": 2, "y": 0 }
       ]
     }
   }
