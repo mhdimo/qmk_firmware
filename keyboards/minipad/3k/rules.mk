@@ -1,12 +1,9 @@
-# Path: keyboards/moonpad/2k/rules.mk
-
+# Path: keyboards/rephlex/3k/rules.mk
 SRC += analog.c
 SRC += matrix.c
 SRC += lut.c
-SRC += scanFunctions.c
+SRC += scanfunctions.c
 
 CUSTOM_MATRIX = lite
 
-LTO_ENABLE = yes
 OPT = 3
-
