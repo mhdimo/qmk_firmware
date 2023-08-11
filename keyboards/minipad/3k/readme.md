@@ -1,5 +1,5 @@
 # minipad/3d
-![minipad/3d]()
+![minipad/3k]()
 
 *An analog keypad intended for Osu! with dynamic actuation, VIA configurable.
 
