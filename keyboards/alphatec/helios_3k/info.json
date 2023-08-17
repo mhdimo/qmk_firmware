@@ -1,6 +1,6 @@
 {
   "manufacturer": "RephlexZero",
-  "keyboard_name": "rephlex/2k",
+  "keyboard_name": "AlphaTec/Helios 3k",
   "maintainer": "RephlexZero",
   "processor": "RP2040",
   "bootloader": "rp2040",
@@ -26,10 +26,8 @@
   },
   "matrix_pins": {
     "direct": [
-      [
-        "GP26", "GP27", "GP28",
-        "GP18", "NO_PIN", "GP19"
-      ]
+        ["GP26", "GP27","GP28"],
+        ["GP18", null, "GP19"]
     ]
   },
   "ws2812": {

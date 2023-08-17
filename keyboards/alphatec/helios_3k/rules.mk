@@ -1,4 +1,4 @@
-# Path: keyboards/rephlex/2k/rules.mk
+# Path: keyboards/alphatec/helios_3k/rules.mk
 QUANTUM_LIB_SRC += analog.c
 SRC += matrix.c lut.c scanfunctions.c
 

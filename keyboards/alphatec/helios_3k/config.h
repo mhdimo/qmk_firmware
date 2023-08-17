@@ -6,6 +6,9 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #define DYNAMIC_KEYMAP_LAYER_COUNT 1
 #endif
 
+#define MATRIX_ROWS 2
+#define MATRIX_COLS 3
+
 #define EECONFIG_KB_DATA_SIZE 6
 
 #define DEBOUNCE 0

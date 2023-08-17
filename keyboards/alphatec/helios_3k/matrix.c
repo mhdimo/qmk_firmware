@@ -26,11 +26,18 @@ matrix_row_t previous_matrix[MATRIX_ROWS];
 
 bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     memcpy(previous_matrix, current_matrix, sizeof(previous_matrix));
-
     for (uint8_t current_row = 0; current_row < MATRIX_ROWS; current_row++) {
         for (uint8_t current_col = 0; current_col < MATRIX_COLS; current_col++) {
+            pin_t pin = matrix_pins[current_row][current_col];
+            if (pin == NO_PIN) {
+                continue;
+            }
+            if (1) {
+                matrix_read_cols_on_row(current_matrix, current_row);
+                continue;
+            }
             key_t *key = &keys[current_row][current_col];
-            key->value = lut[analogReadPin(matrix_pins[current_row][current_col]) + key->offset];
+            key->value = lut[analogReadPin(pin) + key->offset];
             key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
 
             switch (g_config.mode) {
