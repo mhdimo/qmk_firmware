@@ -3,8 +3,10 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #pragma once
 
 #ifdef VIA_ENABLE
-#define DYNAMIC_KEYMAP_LAYER_COUNT 1
+#    define DYNAMIC_KEYMAP_LAYER_COUNT 1
 #endif
+
+#define SWITCH_TYPES {{0, 0, 0}, {1, 0, 1}};
 
 #define MATRIX_ROWS 2
 #define MATRIX_COLS 3

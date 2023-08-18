@@ -22,9 +22,11 @@ void matrix_init_custom(void) {
 }
 
 enum analog_key_modes { dynamic_actuation = 0, continuous_dynamic_actuation, static_actuation, flashing };
-matrix_row_t previous_matrix[MATRIX_ROWS];
+enum switch_types { analog_switch = 0, digital_switch };
+bool switch_type[MATRIX_ROWS][MATRIX_COLS] = SWITCH_TYPES;
 
-bool matrix_scan_custom(matrix_row_t current_matrix[]) {
+matrix_row_t previous_matrix[MATRIX_ROWS];
+bool         matrix_scan_custom(matrix_row_t current_matrix[]) {
     memcpy(previous_matrix, current_matrix, sizeof(previous_matrix));
     for (uint8_t current_row = 0; current_row < MATRIX_ROWS; current_row++) {
         for (uint8_t current_col = 0; current_col < MATRIX_COLS; current_col++) {
@@ -32,28 +34,33 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
             if (pin == NO_PIN) {
                 continue;
             }
-            if (1) {
-                matrix_read_cols_on_row(current_matrix, current_row);
-                continue;
-            }
-            key_t *key = &keys[current_row][current_col];
-            key->value = lut[analogReadPin(pin) + key->offset];
-            key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
+            switch (switch_type[current_row][current_col]) {
+                case analog_switch:
+                    key_t *key = &keys[current_row][current_col];
+                    key->value = lut[analogReadPin(pin) + key->offset];
+                    key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
 
-            switch (g_config.mode) {
-                case dynamic_actuation:
-                    matrix_read_cols_dynamic_actuation(&current_matrix[current_row], current_col, key);
-                    break;
-                case continuous_dynamic_actuation:
-                    matrix_read_cols_continuous_dynamic_actuation(&current_matrix[current_row], current_col, key);
-                    break;
-                case static_actuation:
-                    matrix_read_cols_static_actuation(&current_matrix[current_row], current_col, key);
-                    break;
-                case flashing:
-                default:
-                    bootloader_jump();
-                    break;
+                    switch (g_config.mode) {
+                        case dynamic_actuation:
+                            matrix_read_cols_dynamic_actuation(&current_matrix[current_row], current_col, key);
+                            break;
+                        case continuous_dynamic_actuation:
+                            matrix_read_cols_continuous_dynamic_actuation(&current_matrix[current_row], current_col, key);
+                            break;
+                        case static_actuation:
+                            matrix_read_cols_static_actuation(&current_matrix[current_row], current_col, key);
+                            break;
+                        case flashing:
+                        default:
+                            bootloader_jump();
+                            break;
+                    }
+                case digital_switch:
+                    if (readPin(pin)) {
+                        register_key(&current_matrix[current_row], current_col);
+                    } else {
+                        deregister_key(&current_matrix[current_row], current_col);
+                    }
             }
         }
     }
