@@ -9,19 +9,19 @@
     "bootmagic": true,
     "mousekey": false,
     "extrakey": false,
-    "console": false,
-    "debug": false,
+    "console": true,
+    "debug": true,
     "command": true,
     "nkro": true,
-    "rgb_matrix": true,
+    "rgb_matrix": true
   },
   "build": {
     "lto": true
   },
   "usb": {
     "device_version": "1.0.0",
-    "pid": "0x2612",
-    "vid": "0x4D4F"
+    "pid": "0x7272",
+    "vid": "0x7272"
   },
   "matrix_pins": {
     "direct": [

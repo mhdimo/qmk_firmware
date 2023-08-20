@@ -14,7 +14,11 @@ pin_t         matrix_pins[MATRIX_ROWS][MATRIX_COLS] = DIRECT_PINS;
 analog_config g_config                              = {.mode = 1, .actuation_point = 32, .press_sensitivity = 32, .release_sensitivity = 32, .press_hysteresis = 0, .release_hysteresis = 5};
 key_t         keys[MATRIX_ROWS][MATRIX_COLS]        = {0};
 
+enum switch_types { analog_switch = 0, digital_switch };
+bool switch_type[MATRIX_ROWS][MATRIX_COLS] = SWITCH_TYPES;
 void matrix_init_custom(void) {
+    setPinInputHigh(GP18);
+    setPinInputHigh(GP19);
     generate_lut();
     get_sensor_offsets(distance_to_adc(0));
     wait_ms(100); // Let ADC reach steady state
@@ -22,8 +26,6 @@ void matrix_init_custom(void) {
 }
 
 enum analog_key_modes { dynamic_actuation = 0, continuous_dynamic_actuation, static_actuation, flashing };
-enum switch_types { analog_switch = 0, digital_switch };
-bool switch_type[MATRIX_ROWS][MATRIX_COLS] = SWITCH_TYPES;
 
 matrix_row_t previous_matrix[MATRIX_ROWS];
 bool         matrix_scan_custom(matrix_row_t current_matrix[]) {
@@ -55,12 +57,14 @@ bool         matrix_scan_custom(matrix_row_t current_matrix[]) {
                             bootloader_jump();
                             break;
                     }
+                    break;
                 case digital_switch:
                     if (readPin(pin)) {
-                        register_key(&current_matrix[current_row], current_col);
-                    } else {
                         deregister_key(&current_matrix[current_row], current_col);
+                    } else {
+                        register_key(&current_matrix[current_row], current_col);
                     }
+                    break;
             }
         }
     }
