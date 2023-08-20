@@ -2,8 +2,8 @@
   "manufacturer": "RephlexZero",
   "keyboard_name": "rephlex/2k",
   "maintainer": "RephlexZero",
-  "processor": "RP2040",
-  "bootloader": "rp2040",
+  "processor": "STM32F446",
+  "bootloader": "stm32-dfu",
   "url": "https://github.com/RephlexZero/MoonPad",
   "features": {
     "bootmagic": true,
@@ -27,14 +27,14 @@
   "matrix_pins": {
     "direct": [
       [
-        "GP26",
-        "GP27"
+        "A0",
+        "A1"
       ]
     ]
   },
   "ws2812": {
-    "pin": "GP12",
-    "driver": "vendor"
+    "pin": "C5",
+    "driver": "pwm"
   },
   "rgb_matrix": {
     "driver": "WS2812",
