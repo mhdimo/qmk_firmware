@@ -13,7 +13,7 @@
     "debug": false,
     "command": true,
     "nkro": true,
-    "rgb_matrix": true,
+    "rgb_matrix": false,
     "oled": true
   },
   "build": {
