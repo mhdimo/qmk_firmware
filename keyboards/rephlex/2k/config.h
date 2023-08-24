@@ -6,6 +6,8 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #define DYNAMIC_KEYMAP_LAYER_COUNT 1
 #endif
 
+#define WS2812_PWM_DRIVER PWMD8
+
 #define EECONFIG_KB_DATA_SIZE 6
 
 #define DEBOUNCE 0
