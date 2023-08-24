@@ -5,3 +5,5 @@ SRC += matrix.c lut.c scanfunctions.c
 CUSTOM_MATRIX = lite
 
 OPT = 3
+
+WEAR_LEVELING_DRIVER = embedded_flash

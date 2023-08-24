@@ -1,6 +1,6 @@
 {
   "manufacturer": "RephlexZero",
-  "keyboard_name": "rephlex/2k",
+  "keyboard_name": "rephlex/moonboard",
   "maintainer": "RephlexZero",
   "processor": "STM32F446",
   "bootloader": "stm32-dfu",
