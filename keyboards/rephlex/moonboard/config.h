@@ -2,9 +2,7 @@
 SPDX-License-Identifier: GPL-2.0-or-later */
 #pragma once
 
-#ifdef VIA_ENABLE
 #define DYNAMIC_KEYMAP_LAYER_COUNT 1
-#endif
 
 #define WS2812_PWM_DRIVER PWMD8
 
