@@ -72,8 +72,6 @@ bool         matrix_scan_custom(matrix_row_t current_matrix[]) {
                         register_key(&current_matrix[current_row], current_col);
                     }
                     break;
-                case default:
-                    break;
             }
         }
     }
