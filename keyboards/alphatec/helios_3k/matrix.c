@@ -17,8 +17,15 @@ key_t         keys[MATRIX_ROWS][MATRIX_COLS]        = {0};
 enum switch_types { analog_switch = 0, digital_switch };
 bool switch_type[MATRIX_ROWS][MATRIX_COLS] = SWITCH_TYPES;
 void matrix_init_custom(void) {
-    setPinInputHigh(GP18);
-    setPinInputHigh(GP19);
+    for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
+        for (uint8_t col = 0; col < MATRIX_COLS; col++) {
+            if (switch_type[row][col] == digital_switch) {
+                pin_t pin = matrix_pins[row][col];
+                setPinInputHigh(pin);
+                writePinHigh(pin);
+            }
+        }
+    }
     generate_lut();
     get_sensor_offsets(distance_to_adc(0));
     wait_ms(100); // Let ADC reach steady state
