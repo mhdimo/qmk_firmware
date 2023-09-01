@@ -1,25 +1,16 @@
 /* Copyright 2023 RephlexZero (@RephlexZero)
 SPDX-License-Identifier: GPL-2.0-or-later */
 #include "quantum.h"
-#include "3k.h"
+#include "analogkeys.h"
 #include "analog.h"
-#include "config.h"
 
 extern pin_t matrix_pins[MATRIX_ROWS][MATRIX_COLS];
-void get_sensor_offsets(uint16_t rest_adc_value) {
+void         get_sensor_offsets(uint16_t rest_adc_value) {
     for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
         for (uint8_t j = 0; j < MATRIX_COLS; j++) {
             keys[i][j].offset = rest_adc_value - analogReadPin(matrix_pins[i][j]);
         }
     }
-}
-
-int min(int a, int b) {
-    return a < b ? a : b;
-}
-
-int max(int a, int b) {
-    return a > b ? a : b;
 }
 
 void update_extremum(key_t *key) {
@@ -36,11 +27,11 @@ void deregister_key(matrix_row_t *current_row, uint8_t current_col) {
 
 void matrix_read_cols_static_actuation(matrix_row_t *current_row, uint8_t current_col, key_t *key) {
     if (*current_row & (1 << current_col)) {
-        if (key->value < g_config.actuation_point - g_config.release_hysteresis) {
+        if (key->value < MAX(g_config.actuation_point - g_config.release_hysteresis, 0)) {
             deregister_key(current_row, current_col);
         }
     } else {
-        if (key->value > g_config.actuation_point + g_config.press_hysteresis) {
+        if (key->value > MIN(g_config.actuation_point + g_config.press_hysteresis, 255)) {
             register_key(current_row, current_col);
         }
     }

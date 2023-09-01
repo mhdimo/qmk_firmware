@@ -4,26 +4,21 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
-#include "config.h"
 #include "print.h"
 #include "quantum.h"
 #include "analog.h"
-#include "3k.h"
 #include "lut.h"
 #include "scanfunctions.h"
 
-pin_t matrix_pins[MATRIX_ROWS][MATRIX_COLS] = MATRIX_PINS;
-key_t keys[MATRIX_ROWS][MATRIX_COLS]        = {0};
+pin_t         matrix_pins[MATRIX_ROWS][MATRIX_COLS] = DIRECT_PINS;
+analog_config g_config                              = {.mode = 1, .actuation_point = 32, .press_sensitivity = 32, .release_sensitivity = 32, .press_hysteresis = 0, .release_hysteresis = 5};
+key_t         keys[MATRIX_ROWS][MATRIX_COLS]        = {0};
 
 void matrix_init_custom(void) {
-    uint16_t rest_adc_value = ADC_RESOLUTION >> 1;
-
     generate_lut();
-    rest_adc_value = distance_to_adc(0) + 1;
-
-    get_sensor_offsets(rest_adc_value);
+    get_sensor_offsets(distance_to_adc(0));
     wait_ms(100); // Let ADC reach steady state
-    get_sensor_offsets(rest_adc_value);
+    get_sensor_offsets(distance_to_adc(0));
 }
 
 enum analog_key_modes { dynamic_actuation = 0, continuous_dynamic_actuation, static_actuation, flashing };
@@ -36,7 +31,7 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
         for (uint8_t current_col = 0; current_col < MATRIX_COLS; current_col++) {
             key_t *key = &keys[current_row][current_col];
             key->value = lut[analogReadPin(matrix_pins[current_row][current_col]) + key->offset];
-            key->value = min(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
+            key->value = MIN((key->value << 8) / lut[1100 + key->offset], 255);
 
             switch (g_config.mode) {
                 case dynamic_actuation:

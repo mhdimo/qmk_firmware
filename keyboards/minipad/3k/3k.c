@@ -5,61 +5,44 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "quantum.h"
 #include "analog.h"
 #include "eeprom.h"
-#include "config.h"
+#include "analogkeys.h"
 
 extern pin_t matrix_pins[MATRIX_ROWS][MATRIX_COLS];
 void         bootmagic_lite(void) {
-    if (analogReadPin(matrix_pins[BOOTMAGIC_LITE_ROW][BOOTMAGIC_LITE_COLUMN] < 1350)) {
+    if (analogReadPin(matrix_pins[BOOTMAGIC_LITE_ROW][BOOTMAGIC_LITE_COLUMN]) < 1350) {
         bootloader_jump();
     }
 }
 
-#ifdef DEBUG_MATRIX
+#ifdef DEBUG_ENABLE
 static uint8_t i = 0;
 void           housekeeping_task_user(void) {
     if (i == 0) {
-        uprintf("Mode:%d Actuation Point %d Press/Release sensitivity:%d/%d\n", g_config.mode, g_config.actuation_point, g_config.press_hysteresis, g_config.release_hysteresis);
+        uprintf("M: %d AP: %d PS/RS: %d/%d ", g_config.mode, g_config.actuation_point, g_config.press_sensitivity, g_config.release_sensitivity);
         for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
-            uprintf("\n");
             for (uint8_t j = 0; j < MATRIX_COLS; j++) {
-                uprintf("%d/%d", keys[i][j].value, analogReadPin(matrix_pins[i][j]));
+                uprintf("%d/%d ", keys[i][j].value, analogReadPin(matrix_pins[i][j]));
             }
-            uprintf("\n");
         }
+        uprintf("\n");
     }
     i++;
 }
 #endif
 
-analog_config g_config = {
-    .mode                = 1,
-    .actuation_point     = 32,
-    .press_sensitivity   = 32,
-    .release_sensitivity = 32,
-    .press_hysteresis    = 5,
-    .release_hysteresis  = 5,
-};
-
-#ifdef VIA_ENABLE
 void values_load(void) {
-    eeprom_read_block(&g_config, ((void *)VIA_EEPROM_CUSTOM_CONFIG_ADDR), sizeof(g_config));
+    eeconfig_read_kb_datablock(&g_config);
 }
 
 void values_save(void) {
-    eeprom_update_block(&g_config, ((void *)VIA_EEPROM_CUSTOM_CONFIG_ADDR), sizeof(g_config));
+    eeconfig_update_kb_datablock(&g_config);
 }
 
-void via_init_kb(void) {
-    /* If the EEPROM has the magic, the data is good.
-    OK to load from EEPROM */
-    if (via_eeprom_is_valid()) {
-        values_load();
-    } else {
-        values_save();
-        /* DO NOT set EEPROM valid here, let caller do this */
-    }
+void keyboard_post_init_kb(void) {
+    values_load();
 }
 
+#ifdef VIA_ENABLE
 void via_custom_value_command_kb(uint8_t *data, uint8_t length) {
     /* data = [ command_id, channel_id, value_id, value_data ] */
     uint8_t *command_id        = &(data[0]);
@@ -123,10 +106,10 @@ void via_config_set_value(uint8_t *data) {
             g_config.release_sensitivity = *value_data * 255 / 40;
             break;
         case id_press_hysteresis:
-            g_config.press_hysteresis = *value_data;
+            g_config.press_hysteresis = *value_data * 255 / 40;
             break;
         case id_release_hysteresis:
-            g_config.release_hysteresis = *value_data;
+            g_config.release_hysteresis = *value_data * 255 / 40;
             break;
     }
 }
@@ -149,10 +132,10 @@ void via_config_get_value(uint8_t *data) {
             *value_data = g_config.release_sensitivity * 40 / 255;
             break;
         case id_press_hysteresis:
-            *value_data = g_config.press_hysteresis;
+            *value_data = g_config.press_hysteresis * 40 / 255;
             break;
         case id_release_hysteresis:
-            *value_data = g_config.release_hysteresis;
+            *value_data = g_config.release_hysteresis * 40 / 255;
             break;
     }
 }
