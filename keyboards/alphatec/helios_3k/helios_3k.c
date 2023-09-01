@@ -15,16 +15,6 @@ void         bootmagic_lite(void) {
     }
 }
 
-
-static uint8_t i = 0;
-void           housekeeping_task_user(void) {
-    if (i == 0) {
-        uprintf("%d %d %d %ld %ld\n",analogReadPin(matrix_pins[0][0]),analogReadPin(matrix_pins[0][1]),analogReadPin(matrix_pins[0][2]),readPin(matrix_pins[1][0]),readPin(matrix_pins[1][2]));
-    }
-    i++;
-}
-
-
 void values_load(void) {
     eeconfig_read_kb_datablock(&g_config);
 }
