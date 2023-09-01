@@ -10,8 +10,7 @@
     "mousekey": false,
     "extrakey": false,
     "console": true,
-    "debug": true,
-    "command": true,
+    "command": false,
     "nkro": true
   },
   "build": {
