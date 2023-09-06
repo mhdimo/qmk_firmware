@@ -8,7 +8,9 @@ extern pin_t matrix_pins[MATRIX_ROWS][MATRIX_COLS];
 void         get_sensor_offsets(uint16_t rest_adc_value) {
     for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
         for (uint8_t j = 0; j < MATRIX_COLS; j++) {
-            keys[i][j].offset = rest_adc_value - analogReadPin(matrix_pins[i][j]);
+            if (switch_type[i][j] == analog_switch) {
+                keys[i][j].offset = rest_adc_value - analogReadPin(matrix_pins[i][j]);
+            }
         }
     }
 }

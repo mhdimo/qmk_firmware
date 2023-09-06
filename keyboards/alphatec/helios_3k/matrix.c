@@ -14,7 +14,6 @@ pin_t         matrix_pins[MATRIX_ROWS][MATRIX_COLS] = DIRECT_PINS;
 analog_config g_config                              = {.mode = 1, .actuation_point = 32, .press_sensitivity = 32, .release_sensitivity = 32, .press_hysteresis = 0, .release_hysteresis = 5};
 key_t         keys[MATRIX_ROWS][MATRIX_COLS]        = {0};
 
-enum switch_types { analog_switch = 0, digital_switch };
 bool switch_type[MATRIX_ROWS][MATRIX_COLS] = SWITCH_TYPES;
 
 void matrix_init_pins(void) {
@@ -24,14 +23,7 @@ void matrix_init_pins(void) {
             if(pin != NO_PIN) {
                 switch (switch_type[row][col]) {
                     case digital_switch:
-                        ATOMIC_BLOCK_FORCEON {
-                            setPinInputHigh(pin);
-                        }
-                        break;
-                    case analog_switch:
-                        ATOMIC_BLOCK_FORCEON {
-                            setPinInput(pin);
-                        }
+                        setPinInputHigh(pin);
                         break;
                 }
             }
@@ -80,7 +72,6 @@ bool         matrix_scan_custom(matrix_row_t current_matrix[]) {
                     }
                     break;
                 case digital_switch:
-                    uprintf("%ld %ld\n", readPin(pin), pin);
                     if (readPin(pin)) { // Active low
                         deregister_key(&current_matrix[current_row], current_col);
                     } else {

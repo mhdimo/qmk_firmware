@@ -1,6 +1,12 @@
 /* Copyright 2023 RephlexZero (@RephlexZero)
 SPDX-License-Identifier: GPL-2.0-or-later */
+#pragma once
+
 #include <stdint.h>
+
+enum switch_types { analog_switch = 0, digital_switch };
+
+bool switch_type[MATRIX_ROWS][MATRIX_COLS];
 
 /* global struct to save keypress logic params */
 typedef struct {
