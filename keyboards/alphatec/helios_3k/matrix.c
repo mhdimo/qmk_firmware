@@ -33,9 +33,9 @@ void matrix_init_pins(void) {
 void matrix_init_custom(void) {
     matrix_init_pins();
     generate_lut();
-    get_sensor_offsets(distance_to_adc(0));
+    get_sensor_offsets();
     wait_ms(100); // Let ADC reach steady state
-    get_sensor_offsets(distance_to_adc(0));
+    get_sensor_offsets();
 }
 
 enum analog_key_modes { dynamic_actuation = 0, continuous_dynamic_actuation, static_actuation, flashing };

@@ -5,7 +5,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "quantum.h"
 #include "analog.h"
 #include "eeprom.h"
-#include "analogkeys.h"
+#include "scanfunctions.h"
 #include "print.h"
 
 extern pin_t matrix_pins[MATRIX_ROWS][MATRIX_COLS];
@@ -13,6 +13,17 @@ void         bootmagic_lite(void) {
     if (analogReadPin(matrix_pins[BOOTMAGIC_LITE_ROW][BOOTMAGIC_LITE_COLUMN]) < 1350) {
         bootloader_jump();
     }
+}
+
+uint32_t idle_recalibrate_callback(uint32_t trigger_time, void *cb_arg) {
+    get_sensor_offsets();
+    return 10000;
+}
+
+deferred_token idle_recalibrate_token;
+bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+    extend_deferred_exec(idle_recalibrate_token, 300000);
+    return true;
 }
 
 void values_load(void) {
@@ -24,6 +35,7 @@ void values_save(void) {
 }
 
 void keyboard_post_init_kb(void) {
+    idle_recalibrate_token = defer_exec(300000, idle_recalibrate_callback, NULL);
     values_load();
 }
 
