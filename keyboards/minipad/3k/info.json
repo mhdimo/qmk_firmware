@@ -11,7 +11,8 @@
     "extrakey": false,
     "console": true,
     "command": false,
-    "nkro": true
+    "nkro": true,
+    "deferred_exec": true
   },
   "build": {
     "lto": true
