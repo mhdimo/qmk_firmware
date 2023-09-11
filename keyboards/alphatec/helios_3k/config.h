@@ -2,14 +2,9 @@
 SPDX-License-Identifier: GPL-2.0-or-later */
 #pragma once
 
-#ifdef VIA_ENABLE
-#    define DYNAMIC_KEYMAP_LAYER_COUNT 1
-#endif
+#define DYNAMIC_KEYMAP_LAYER_COUNT 1
 
 #define SWITCH_TYPES {{0, 0, 0}, {1, 0, 1}};
-
-#define MATRIX_ROWS 2
-#define MATRIX_COLS 3
 
 #define EECONFIG_KB_DATA_SIZE 6
 
@@ -22,10 +17,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 
 #define RGB_DISABLE_WHEN_USB_SUSPENDED
 
-#define RGB_MATRIX_MAXIMUM_BRIGHTNESS 255
 #define RGB_MATRIX_DEFAULT_VAL 128
-
-#define RGB_MATRIX_LED_COUNT 8
 
 #define ENABLE_RGB_MATRIX_BREATHING
 #define ENABLE_RGB_MATRIX_BAND_SAT
@@ -72,8 +64,3 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 
 #define RGB_MATRIX_FRAMEBUFFER_EFFECTS
 #define RGB_MATRIX_KEYPRESSES
-
-#define I2C1_SCL_PIN GP19
-#define I2C1_SDA_PIN GP18
-#define OLED_BRIGHTNESS 128
-#define OLED_UPDATE_INTERVAL 1000
