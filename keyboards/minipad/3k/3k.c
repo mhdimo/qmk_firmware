@@ -20,24 +20,22 @@ uint32_t idle_recalibrate_callback(uint32_t trigger_time, void *cb_arg) {
 }
 
 deferred_token idle_recalibrate_token;
-bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+bool           process_record_kb(uint16_t keycode, keyrecord_t *record) {
     extend_deferred_exec(idle_recalibrate_token, 300000);
     return true;
 }
 
 #ifdef DEBUG_ENABLE
 static uint8_t i = 0;
-void housekeeping_task_user(void) {
+void           housekeeping_task_user(void) {
     if (i == 0) {
         char formattedString[200]; // Adjust the buffer size as needed
 
-        snprintf(formattedString, sizeof(formattedString), "M: %d AP: %d PS/RS: %d/%d\n",
-                           g_config.mode, g_config.actuation_point, g_config.press_sensitivity, g_config.release_sensitivity);
+        snprintf(formattedString, sizeof(formattedString), "M: %d AP: %d PS/RS: %d/%d\n", g_config.mode, g_config.actuation_point, g_config.press_sensitivity, g_config.release_sensitivity);
 
         for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
             for (uint8_t col = 0; col < MATRIX_COLS; col++) {
-                snprintf(formattedString + strlen(formattedString), sizeof(formattedString) - strlen(formattedString),
-                                   "%d/%d ", keys[row][col].value, analogReadPin(matrix_pins[row][col]));
+                snprintf(formattedString + strlen(formattedString), sizeof(formattedString) - strlen(formattedString), "%d/%d ", keys[row][col].value, analogReadPin(matrix_pins[row][col]));
             }
             strcat(formattedString, "\n\n");
         }
@@ -55,6 +53,10 @@ void values_load(void) {
 
 void values_save(void) {
     eeconfig_update_kb_datablock(&g_config);
+}
+
+void eeconfig_init_kb() {
+    values_save();
 }
 
 void keyboard_post_init_kb(void) {
