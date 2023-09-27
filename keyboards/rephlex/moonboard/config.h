@@ -8,7 +8,8 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 
 #define EECONFIG_KB_DATA_SIZE 6
 
-#define DEBOUNCE 0
+#define DEBUG_ENABLE
+//#define DEBOUNCE 0
 #define DEBUG_MATRIX_SCAN_RATE
 
 #define ADC_RESOLUTION 12
@@ -17,7 +18,6 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 
 #define RGB_DISABLE_WHEN_USB_SUSPENDED
 
-#define RGB_MATRIX_MAXIMUM_BRIGHTNESS 255
 #define RGB_MATRIX_DEFAULT_VAL 128
 
 #define RGB_MATRIX_LED_COUNT 6
