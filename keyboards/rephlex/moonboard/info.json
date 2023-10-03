@@ -13,9 +13,9 @@
     "debug": false,
     "command": true,
     "nkro": true,
-    "rgb_matrix": true,
-    "oled": true,
-    "deferred_exec": true
+    "rgb_matrix": false,
+    "oled": false,
+    "deferred_exec": false
   },
   "debounce": 0,
   "eeprom": {
@@ -42,7 +42,7 @@
     "driver": "pwm"
   },
   "rgb_matrix": {
-    "driver": "WS2812",
+    "driver": "ws2812",
     "max_brightness": 255,
     "default_brightness": 128,
     "layout": [
