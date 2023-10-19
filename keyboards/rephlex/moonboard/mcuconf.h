@@ -4,6 +4,12 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 
 #include_next <mcuconf.h>
 
+#undef STM32_PLLM_VALUE
+#define STM32_PLLM_VALUE 4
+
+#undef STM32_PLLSAIM_VALUE
+#define STM32_PLLSAIM_VALUE 4
+
 #undef STM32_PWM_USE_ADVANCED
 #define STM32_PWM_USE_ADVANCED TRUE
 

@@ -6,7 +6,7 @@
   "bootloader": "stm32-dfu",
   "url": "https://github.com/RephlexZero/MoonPad",
   "features": {
-    "bootmagic": true,
+    "bootmagic": false,
     "mousekey": false,
     "extrakey": false,
     "console": true,

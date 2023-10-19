@@ -17,11 +17,14 @@ analog_config g_config = {
 };
 
 extern pin_t matrix_pins[MATRIX_ROWS][MATRIX_COLS];
+
+#ifdef BOOTMAGIC_ENABLE
 void         bootmagic_lite(void) {
     if (analogReadPin(matrix_pins[BOOTMAGIC_LITE_ROW][BOOTMAGIC_LITE_COLUMN]) < 1350) {
         bootloader_jump();
     }
 }
+#endif
 
 #ifdef DEFERRED_EXEC_ENABLE
 uint32_t idle_recalibrate_callback(uint32_t trigger_time, void *cb_arg) {

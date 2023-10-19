@@ -9,7 +9,6 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #define EECONFIG_KB_DATA_SIZE 6
 
 #define DEBUG_ENABLE
-//#define DEBOUNCE 0
 #define DEBUG_MATRIX_SCAN_RATE
 
 #define ADC_RESOLUTION 12
@@ -68,7 +67,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #define RGB_MATRIX_FRAMEBUFFER_EFFECTS
 #define RGB_MATRIX_KEYPRESSES
 
-#define I2C1_SCL_PIN A8
-#define I2C1_SDA_PIN C9
+#define I2C1_SCL_PIN B6
+#define I2C1_SDA_PIN B7
 #define OLED_BRIGHTNESS 128
 #define OLED_UPDATE_INTERVAL 1000
