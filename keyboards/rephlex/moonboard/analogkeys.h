@@ -25,3 +25,4 @@ typedef struct {
     bool    continuous_dynamic_actuation;
 } key_t;
 extern key_t keys[MATRIX_ROWS][MATRIX_COLS];
+

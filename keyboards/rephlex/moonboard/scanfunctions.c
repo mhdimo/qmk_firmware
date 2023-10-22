@@ -1,6 +1,5 @@
 /* Copyright 2023 RephlexZero (@RephlexZero)
 SPDX-License-Identifier: GPL-2.0-or-later */
-#include "quantum.h"
 #include "scanfunctions.h"
 #include "analog.h"
 
