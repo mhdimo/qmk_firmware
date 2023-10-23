@@ -10,6 +10,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "lut.h"
 #include "multiplexer.h"
 #include "scanfunctions.h"
+#include "lut.h"
 
 
 pin_t         matrix_pins[MATRIX_ROWS][MATRIX_COLS] = DIRECT_PINS;
@@ -29,9 +30,9 @@ matrix_row_t previous_matrix[MATRIX_ROWS];
 bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     memcpy(previous_matrix, current_matrix, sizeof(previous_matrix));
     for (uint8_t channel = 0; channel < MUX_CHANNELS; channel++) {
-        // Greycoding
-        uint8_t channel = (channel >> 1) ^ channel;
-        select_mux(channel);
+        select_mux((channel >> 1) ^ channel);
+        dprintf("Channel: %d\n", current_channel);
+        continue;
         for (uint8_t mux = 0; mux < MUXES; mux++) {
             uint8_t current_row = mux_index[mux][channel].row;
             uint8_t current_col = mux_index[mux][channel].col;

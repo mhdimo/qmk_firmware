@@ -15,7 +15,7 @@
     "nkro": true,
     "rgb_matrix": false,
     "oled": false,
-    "deferred_exec": true
+    "deferred_exec": false
   },
   "debounce": 0,
   "eeprom": {

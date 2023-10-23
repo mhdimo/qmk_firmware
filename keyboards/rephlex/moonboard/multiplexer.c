@@ -3,11 +3,12 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "quantum.h"
 #include "multiplexer.h"
 
+const pin_t mux_selector_pins[MUX_SELECTOR_BITS] = MUX_SELECTOR_PINS;
+
 void multiplexer_init(void) {
     for (uint8_t i = 0; i < MUX_SELECTOR_BITS; i++) {
         pin_t pin = mux_selector_pins[i];
-        setPinOutputPushPull(pin);
-        writePinLow(pin);
+        setPinOutput(pin);
     }
 }
 
@@ -16,6 +17,7 @@ bool select_mux(uint8_t channel) {
     for (uint8_t i = 0; i < MUX_SELECTOR_BITS; i++) {
         writePin(mux_selector_pins[i], channel & (1 << i));
     }
+    current_channel = channel;
     return 1;
 }
 
@@ -28,4 +30,3 @@ const mux_t mux_index[MUXES][MUX_CHANNELS] = {
     {{2,11},{1,12},{0,11},{0,9},{0,10},{1,10},{1,11},{2,10},{3,10},{5,4},{4,10},{5,5},{3,9},{4,11},{3,11},{5,6}},
     {{2,14},{3,13},{0,12},NC,{1,13},NC,{2,12},{2,13},{3,12},{5,7},{4,12},{4,14},NC,{5,8},{4,13},{5,9}}
 };
-const pin_t mux_selector_pins[] = MUX_SELECTOR_PINS;
