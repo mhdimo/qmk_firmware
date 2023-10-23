@@ -5,7 +5,6 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "multiplexer.h"
 #include "lut.h"
 
-extern pin_t matrix_pins[MATRIX_ROWS][MATRIX_COLS];
 void         get_sensor_offsets(void) {
     uint16_t rest_adc_value = distance_to_adc(0);
     for (uint8_t channel = 0; channel < MUX_CHANNELS; channel++) {
@@ -14,8 +13,8 @@ void         get_sensor_offsets(void) {
             uint8_t current_row = mux_index[mux][channel].row;
             uint8_t current_col = mux_index[mux][channel].col;
 
-            pin_t pin = matrix_pins[current_row][current_col];
-            if (pin == NO_PIN) continue;
+            pin_t pin = mux_pins[mux];
+
             keys[current_row][current_col].offset = rest_adc_value - analogReadPin(pin);
         }
     }

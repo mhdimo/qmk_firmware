@@ -12,8 +12,6 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "scanfunctions.h"
 #include "lut.h"
 
-
-pin_t         matrix_pins[MATRIX_ROWS][MATRIX_COLS] = DIRECT_PINS;
 key_t         keys[MATRIX_ROWS][MATRIX_COLS]        = {0};
 
 void matrix_init_custom(void) {
@@ -32,13 +30,12 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     for (uint8_t channel = 0; channel < MUX_CHANNELS; channel++) {
         select_mux((channel >> 1) ^ channel);
         dprintf("Channel: %d\n", current_channel);
-        continue;
         for (uint8_t mux = 0; mux < MUXES; mux++) {
             uint8_t current_row = mux_index[mux][channel].row;
             uint8_t current_col = mux_index[mux][channel].col;
 
-            pin_t pin = matrix_pins[current_row][current_col];
-            if (pin == NO_PIN) continue;
+            if (current_row == 255 || current_col == 255) continue;
+            pin_t pin = mux_pins[mux];
 
             key_t *key = &keys[current_row][current_col];
             key->value = lut[analogReadPin(pin) + key->offset];

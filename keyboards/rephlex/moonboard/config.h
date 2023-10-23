@@ -2,10 +2,17 @@
 SPDX-License-Identifier: GPL-2.0-or-later */
 #pragma once
 
+#define MATRIX_ROWS 6
+#define MATRIX_COLS 16
+
 #define MUXES 6
+#define MUX_PINS { C2, C3, A0, A1, A2, A3 }
+
 #define MUX_SELECTOR_BITS 4
-#define MUX_CHANNELS ( 1 << MUX_SELECTOR_BITS )
 #define MUX_SELECTOR_PINS { B15, B14, B13, B12 }
+
+#define MUX_CHANNELS ( 1 << MUX_SELECTOR_BITS )
+
 
 #define WS2812_PWM_DRIVER PWMD8
 

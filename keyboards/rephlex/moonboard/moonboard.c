@@ -16,11 +16,9 @@ analog_config g_config = {
     .release_hysteresis = 5
 };
 
-extern pin_t matrix_pins[MATRIX_ROWS][MATRIX_COLS];
-
 #ifdef BOOTMAGIC_ENABLE
 void         bootmagic_lite(void) {
-    if (analogReadPin(matrix_pins[BOOTMAGIC_LITE_ROW][BOOTMAGIC_LITE_COLUMN]) < 1350) {
+    if (0) { // TODO: Reimplement
         bootloader_jump();
     }
 }
@@ -42,17 +40,6 @@ bool           process_record_kb(uint16_t keycode, keyrecord_t *record) {
 #ifdef DEBUG_ENABLE
 static uint8_t i = 0;
 void           housekeeping_task_user(void) {
-    if (i == 0) {
-        uprintf("Mode:%d Actuation Point %d Press/Release sensitivity:%d/%d\n", g_config.mode, g_config.actuation_point, g_config.press_sensitivity, g_config.release_sensitivity);
-        for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
-            uprintf("\n");
-            for (uint8_t j = 0; j < MATRIX_COLS; j++) {
-                uprintf("%d/%d ", keys[i][j].value, analogReadPin(matrix_pins[i][j]));
-            }
-            uprintf("\n");
-        }
-    }
-    i++;
 }
 #endif
 
