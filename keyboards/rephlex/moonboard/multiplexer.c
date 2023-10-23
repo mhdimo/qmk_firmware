@@ -3,8 +3,6 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "quantum.h"
 #include "multiplexer.h"
 
-
-
 void multiplexer_init(void) {
     for (uint8_t i = 0; i < MUX_SELECTOR_BITS; i++) {
         pin_t pin = mux_selector_pins[i];
@@ -13,8 +11,15 @@ void multiplexer_init(void) {
     }
 }
 
-const mux_t NC = {0,15}; // A coord with a Null pin
+bool select_mux(uint8_t channel) {
+    if (channel > MUX_CHANNELS) return 0;
+    for (uint8_t i = 0; i < MUX_SELECTOR_BITS; i++) {
+        writePin(mux_selector_pins[i], channel & (1 << i));
+    }
+    return 1;
+}
 
+const mux_t NC = {0,15}; // A coord with a Null pin (from JSON)
 const mux_t mux_index[MUXES][MUX_CHANNELS] = {
     {{2,1},NC,{0,1},NC,{1,1},{1,0},{0,0},{2,0},{3,0},{4,0},NC,{5,0},NC,{4,1},{3,1},{5,1}},
     {{2,3},NC,{0,3},NC,{1,3},{1,2},{0,2},{2,2},NC,{3,2},NC,{4,2},NC,{5,2},{3,3},{4,3}},

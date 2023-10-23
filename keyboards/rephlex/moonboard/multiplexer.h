@@ -4,6 +4,8 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 
 void multiplexer_init(void);
 
+bool select_mux(uint8_t channel);
+
 typedef struct {
     uint8_t row;
     uint8_t col;

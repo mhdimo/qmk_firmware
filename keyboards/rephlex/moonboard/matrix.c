@@ -28,19 +28,17 @@ matrix_row_t previous_matrix[MATRIX_ROWS];
 
 bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     memcpy(previous_matrix, current_matrix, sizeof(previous_matrix));
-    for (uint8_t i = 0; i < MUX_CHANNELS; i++) {
+    for (uint8_t channel = 0; channel < MUX_CHANNELS; channel++) {
         // Greycoding
-        uint8_t idx = (i >> 1) ^ i;
-        for (uint8_t j = 0; j < MUX_SELECTOR_BITS; j++) {
-            writePin(mux_selector_pins[j], idx & (1 << j));
-            wait_ms(500);
-        }
+        uint8_t channel = (channel >> 1) ^ channel;
+        select_mux(channel);
         for (uint8_t mux = 0; mux < MUXES; mux++) {
-            uint8_t current_row = mux_index[mux][idx].row;
-            uint8_t current_col = mux_index[mux][idx].col;
+            uint8_t current_row = mux_index[mux][channel].row;
+            uint8_t current_col = mux_index[mux][channel].col;
 
             pin_t pin = matrix_pins[current_row][current_col];
             if (pin == NO_PIN) continue;
+
             key_t *key = &keys[current_row][current_col];
             key->value = lut[analogReadPin(pin) + key->offset];
             key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);

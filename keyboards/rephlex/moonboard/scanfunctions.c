@@ -2,13 +2,22 @@
 SPDX-License-Identifier: GPL-2.0-or-later */
 #include "scanfunctions.h"
 #include "analog.h"
+#include "multiplexer.h"
 
 extern pin_t matrix_pins[MATRIX_ROWS][MATRIX_COLS];
 void         get_sensor_offsets(void) {
     uint16_t rest_adc_value = distance_to_adc(0);
-    for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
-        for (uint8_t j = 0; j < MATRIX_COLS; j++) {
-            keys[i][j].offset = rest_adc_value - analogReadPin(matrix_pins[i][j]);
+    for (uint8_t i = 0; i < MUX_CHANNELS; i++) {
+        // Greycoding
+        uint8_t idx = (i >> 1) ^ i;
+
+        for (uint8_t mux = 0; mux < MUXES; mux++) {
+            uint8_t current_row = mux_index[mux][idx].row;
+            uint8_t current_col = mux_index[mux][idx].col;
+
+            pin_t pin = matrix_pins[current_row][current_col];
+            if (pin == NO_PIN) continue;
+            keys[current_row][current_col].offset = rest_adc_value - analogReadPin(pin);
         }
     }
 }
