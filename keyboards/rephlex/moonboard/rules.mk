@@ -4,7 +4,7 @@ SRC += matrix.c lut.c scanfunctions.c multiplexer.c
 
 CUSTOM_MATRIX = lite
 
-OPT = 1
+OPT = 2
 
 WEAR_LEVELING_DRIVER = embedded_flash
 ENCODER_MAP_ENABLE = yes

@@ -24,7 +24,6 @@ void matrix_init_custom(void) {
 }
 
 matrix_row_t previous_matrix[MATRIX_ROWS];
-
 bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     memcpy(previous_matrix, current_matrix, sizeof(previous_matrix));
     for (uint8_t channel = 0; channel < MUX_CHANNELS; channel++) {

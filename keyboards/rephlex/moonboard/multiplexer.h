@@ -1,6 +1,7 @@
 /* Copyright 2023 RephlexZero (@RephlexZero)
 SPDX-License-Identifier: GPL-2.0-or-later */
 #include <stdint.h>
+
 uint8_t current_channel;
 
 void multiplexer_init(void);
