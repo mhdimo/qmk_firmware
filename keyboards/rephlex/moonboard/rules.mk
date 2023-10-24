@@ -8,3 +8,4 @@ OPT = 2
 
 WEAR_LEVELING_DRIVER = embedded_flash
 ENCODER_MAP_ENABLE = yes
+AUDIO_DRIVER = dac_additive

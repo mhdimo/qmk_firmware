@@ -2,7 +2,7 @@
   "manufacturer": "RephlexZero",
   "keyboard_name": "rephlex/moonboard",
   "maintainer": "RephlexZero",
-  "processor": "STM32F303",
+  "processor": "STM32F446",
   "bootloader": "stm32-dfu",
   "url": "https://github.com/RephlexZero/MoonPad",
   "features": {
@@ -16,7 +16,16 @@
     "nkro": true,
     "rgb_matrix": true,
     "oled": true,
-    "deferred_exec": true
+    "deferred_exec": true,
+    "audio": true
+  },
+  "encoder": {
+    "rotary": [
+      {"pin_a": "A7", "pin_b": "A6", "resolution": 5}
+    ]
+  },
+  "qmk": {
+    "tap_keycode_delay": 10
   },
   "debounce": 0,
   "build": {

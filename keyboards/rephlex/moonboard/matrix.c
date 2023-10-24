@@ -28,7 +28,6 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     memcpy(previous_matrix, current_matrix, sizeof(previous_matrix));
     for (uint8_t channel = 0; channel < MUX_CHANNELS; channel++) {
         select_mux((channel >> 1) ^ channel);
-        dprintf("Channel: %d\n", current_channel);
         for (uint8_t mux = 0; mux < MUXES; mux++) {
             uint8_t current_row = mux_index[mux][channel].row;
             uint8_t current_col = mux_index[mux][channel].col;
