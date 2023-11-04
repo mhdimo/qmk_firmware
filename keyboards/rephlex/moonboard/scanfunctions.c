@@ -8,10 +8,11 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 void         get_sensor_offsets(void) {
     uint16_t rest_adc_value = distance_to_adc(0);
     for (uint8_t channel = 0; channel < MUX_CHANNELS; channel++) {
-        select_mux((channel >> 1) ^ channel);
+        uint8_t channel_greycoded = (channel >> 1) ^ channel;
+        select_mux(channel_greycoded);
         for (uint8_t mux = 0; mux < MUXES; mux++) {
-            uint8_t current_row = mux_index[mux][channel].row;
-            uint8_t current_col = mux_index[mux][channel].col;
+            uint8_t current_row = mux_index[mux][channel_greycoded].row;
+            uint8_t current_col = mux_index[mux][channel_greycoded].col;
 
             pin_t pin = mux_pins[mux];
 

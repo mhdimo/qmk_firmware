@@ -27,10 +27,11 @@ matrix_row_t previous_matrix[MATRIX_ROWS];
 bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     memcpy(previous_matrix, current_matrix, sizeof(previous_matrix));
     for (uint8_t channel = 0; channel < MUX_CHANNELS; channel++) {
-        select_mux((channel >> 1) ^ channel);
+        uint8_t channel_greycoded = (channel >> 1) ^ channel;
+        select_mux(channel_greycoded);
         for (uint8_t mux = 0; mux < MUXES; mux++) {
-            uint8_t current_row = mux_index[mux][channel].row;
-            uint8_t current_col = mux_index[mux][channel].col;
+            uint8_t current_row = mux_index[mux][channel_greycoded].row;
+            uint8_t current_col = mux_index[mux][channel_greycoded].col;
 
             if (current_row == 255 || current_col == 255) continue;
             pin_t pin = mux_pins[mux];
