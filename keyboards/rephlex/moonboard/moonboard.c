@@ -17,7 +17,7 @@ analog_config g_config = {
 };
 
 #ifdef BOOTMAGIC_ENABLE
-void         bootmagic_lite(void) {
+void bootmagic_lite(void) {
     if (0) { // TODO: Reimplement
         bootloader_jump();
     }
@@ -25,21 +25,37 @@ void         bootmagic_lite(void) {
 #endif
 
 #ifdef DEFERRED_EXEC_ENABLE
-uint32_t idle_recalibrate_callback(uint32_t trigger_time, void *cb_arg) {
-    get_sensor_offsets();
-    return 10000;
+
+#    ifdef DEBUG_ENABLE
+deferred_token debug_token;
+bool           debug_print(void) {
+    char buffer[MATRIX_ROWS * MATRIX_COLS * 5 + MATRIX_ROWS * 2];
+    for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
+        for (uint8_t col = 0; col < MATRIX_COLS; col++) {
+            key_t *key = &keys[row][col];
+            snprintf(buffer, sizeof(buffer), "%5d", key->value);
+        }
+        snprintf(buffer, sizeof(buffer), "\n");
+    }
+    dprintf("Analog values:\n%s\n\n", buffer);
+    return true;
 }
+
+uint32_t debug_callback(uint32_t trigger_time, void *cb_arg) {
+    debug_print();
+    return 100;
+}
+#    endif
 
 deferred_token idle_recalibrate_token;
 bool           process_record_kb(uint16_t keycode, keyrecord_t *record) {
     extend_deferred_exec(idle_recalibrate_token, 300000);
     return true;
 }
-#endif
 
-#ifdef DEBUG_ENABLE
-static uint8_t i = 0;
-void           housekeeping_task_user(void) {
+uint32_t idle_recalibrate_callback(uint32_t trigger_time, void *cb_arg) {
+    get_sensor_offsets();
+    return 10000;
 }
 #endif
 
@@ -51,12 +67,15 @@ void values_save(void) {
     eeconfig_update_kb_datablock(&g_config);
 }
 
-void          eeconfig_init_kb() {
+void eeconfig_init_kb() {
     values_save();
 }
 
 void keyboard_post_init_kb(void) {
 #ifdef DEFERRED_EXEC_ENABLE
+#ifdef DEBUG_ENABLE
+    debug_token = defer_exec(100, debug_callback, NULL);
+#endif
     idle_recalibrate_token = defer_exec(300000, idle_recalibrate_callback, NULL);
 #endif
     values_load();

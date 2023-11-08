@@ -2,7 +2,7 @@
   "manufacturer": "RephlexZero",
   "keyboard_name": "rephlex/moonboard",
   "maintainer": "RephlexZero",
-  "processor": "STM32F446",
+  "processor": "STM32F303",
   "bootloader": "stm32-dfu",
   "url": "https://github.com/RephlexZero/MoonPad",
   "features": {
@@ -10,7 +10,6 @@
     "mousekey": false,
     "extrakey": false,
     "console": true,
-    "debug": false,
     "uniode": false,
     "command": false,
     "nkro": true,
