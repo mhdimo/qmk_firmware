@@ -1,11 +1,14 @@
 /* Copyright 2023 RephlexZero (@RephlexZero)
 SPDX-License-Identifier: GPL-2.0-or-later */
 #include <stdint.h>
+#include <stdio.h>
+#include <stdbool.h>
 #include "moonboard.h"
 #include "quantum.h"
 #include "analog.h"
 #include "eeprom.h"
 #include "scanfunctions.h"
+#include "print.h"
 
 analog_config g_config = {
     .mode = dynamic_actuation,
@@ -30,20 +33,25 @@ void bootmagic_lite(void) {
 deferred_token debug_token;
 bool           debug_print(void) {
     char buffer[MATRIX_ROWS * MATRIX_COLS * 5 + MATRIX_ROWS * 2];
+    buffer[0] = '\0';
+
     for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
         for (uint8_t col = 0; col < MATRIX_COLS; col++) {
-            key_t *key = &keys[row][col];
-            snprintf(buffer, sizeof(buffer), "%5d", key->value);
+            analog_key_t *key = &keys[row][col];
+            char   temp[6];
+            snprintf(temp, sizeof(temp), "%5u", key->value);
+            strcat(buffer, temp);
         }
-        snprintf(buffer, sizeof(buffer), "\n");
+        strcat(buffer, "\n");
     }
-    dprintf("Analog values:\n%s\n\n", buffer);
+
+    uprintf("Analog values:\n%s", buffer);
     return true;
 }
 
-uint32_t debug_callback(uint32_t trigger_time, void *cb_arg) {
+uint32_t debug_print_callback(uint32_t trigger_time, void *cb_arg) {
     debug_print();
-    return 100;
+    return 25;
 }
 #    endif
 
@@ -73,9 +81,9 @@ void eeconfig_init_kb() {
 
 void keyboard_post_init_kb(void) {
 #ifdef DEFERRED_EXEC_ENABLE
-#ifdef DEBUG_ENABLE
-    debug_token = defer_exec(100, debug_callback, NULL);
-#endif
+#    ifdef DEBUG_ENABLE
+    debug_token = defer_exec(1000, debug_print_callback, NULL);
+#    endif
     idle_recalibrate_token = defer_exec(300000, idle_recalibrate_callback, NULL);
 #endif
     values_load();
