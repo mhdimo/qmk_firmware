@@ -12,10 +12,10 @@
     "uniode": false,
     "command": false,
     "nkro": true,
-    "rgb_matrix": false,
-    "oled": false,
+    "rgb_matrix": true,
+    "oled": true,
     "deferred_exec": true,
-    "audio": false
+    "audio": true
   },
   "encoder": {
     "rotary": [
