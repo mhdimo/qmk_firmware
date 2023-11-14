@@ -4,7 +4,6 @@
   "maintainer": "RephlexZero",
   "processor": "STM32F303",
   "bootloader": "stm32-dfu",
-  "url": "https://github.com/RephlexZero/MoonPad",
   "features": {
     "bootmagic": false,
     "mousekey": false,
