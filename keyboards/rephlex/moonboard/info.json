@@ -1,6 +1,6 @@
 {
   "manufacturer": "RephlexZero",
-  "keyboard_name": "rephlex/moonboard",
+  "keyboard_name": "Moonboard",
   "maintainer": "RephlexZero",
   "processor": "STM32F303",
   "bootloader": "stm32-dfu",
@@ -13,9 +13,9 @@
     "command": false,
     "nkro": true,
     "rgb_matrix": true,
-    "oled": true,
+    "oled": false,
     "deferred_exec": true,
-    "audio": true
+    "audio": false
   },
   "encoder": {
     "rotary": [
@@ -31,11 +31,11 @@
   },
   "usb": {
     "device_version": "1.0.0",
-    "pid": "0x2612",
+    "pid": "0x1969",
     "vid": "0x4D4F"
   },
   "ws2812": {
-    "pin": "C5",
+    "pin": "C3",
     "driver": "pwm"
   },
   "rgb_matrix": {
@@ -45,7 +45,50 @@
     "led_count": 81,
     "sleep": true,
     "animations": {
-      "all": true
+      "solid_color": true,
+      "alphas_mods": true,
+      "gradient_up_down": true,
+      "gradient_left_right": true,
+      "breathing": true,
+      "band_sat": true,
+      "band_val": true,
+      "band_pinwheel_sat": true,
+      "band_pinwheel_val": true,
+      "band_spiral_sat": true,
+      "band_spiral_val": true,
+      "cycle_all": true,
+      "cycle_left_right": true,
+      "cycle_up_down": true,
+      "cycle_out_in": true,
+      "cycle_out_in_dual": true,
+      "rainbow_moving_chevron": true,
+      "cycle_pinwheel": true,
+      "cycle_spiral": true,
+      "dual_beacon": true,
+      "rainbow_beacon": true,
+      "rainbow_pinwheels": true,
+      "raindrops": true,
+      "jellybean_raindrops": true,
+      "hue_breathing": true,
+      "hue_pendulum": true,
+      "hue_wave": true,
+      "pixel_fractal": true,
+      "pixel_flow": true,
+      "pixel_rain": true,
+      "typing_heatmap": true,
+      "digital_rain": true,
+      "solid_reactive_simple": true,
+      "solid_reactive": true,
+      "solid_reactive_wide": true,
+      "solid_reactive_multiwide": true,
+      "solid_reactive_cross": true,
+      "solid_reactive_multicross": true,
+      "solid_reactive_nexus": true,
+      "solid_reactive_multinexus": true,
+      "splash": true,
+      "multisplash": true,
+      "solid_splash": true,
+      "solid_multisplash": true
     },
     "layout":
     [

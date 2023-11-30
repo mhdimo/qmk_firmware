@@ -9,6 +9,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "eeprom.h"
 #include "scanfunctions.h"
 #include "print.h"
+#include "multiplexer.h"
 
 analog_config g_config = {
     .mode = dynamic_actuation,
@@ -21,9 +22,7 @@ analog_config g_config = {
 
 #ifdef BOOTMAGIC_ENABLE
 void bootmagic_lite(void) {
-    if (0) { // TODO: Reimplement
-        bootloader_jump();
-    }
+    // TODO: Add RAW to keystruct?
 }
 #endif
 
@@ -80,6 +79,7 @@ void eeconfig_init_kb() {
 }
 
 void keyboard_post_init_kb(void) {
+    rgb_matrix_mode(RGB_MATRIX_RAINBOW_MOVING_CHEVRON);
 #ifdef DEFERRED_EXEC_ENABLE
 #    ifdef DEBUG_ENABLE
     debug_token = defer_exec(1000, debug_print_callback, NULL);
