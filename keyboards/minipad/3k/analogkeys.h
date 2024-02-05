@@ -16,6 +16,7 @@ extern analog_config g_config;
 
 typedef struct {
     /* For individual analog key data */
+    uint16_t raw;
     uint8_t value;
     uint8_t extremum;
     int16_t offset;

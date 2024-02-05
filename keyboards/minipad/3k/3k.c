@@ -35,7 +35,7 @@ void           housekeeping_task_user(void) {
 
         for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
             for (uint8_t col = 0; col < MATRIX_COLS; col++) {
-                snprintf(formattedString + strlen(formattedString), sizeof(formattedString) - strlen(formattedString), "%d/%d ", keys[row][col].value, analogReadPin(matrix_pins[row][col]));
+                snprintf(formattedString + strlen(formattedString), sizeof(formattedString) - strlen(formattedString), "%d/%d ", keys[row][col].value, keys[row][col].raw);
             }
             strcat(formattedString, "\n\n");
         }
