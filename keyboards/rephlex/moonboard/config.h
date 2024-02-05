@@ -3,11 +3,11 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #pragma once
 
 #define MATRIX_ROWS 6
-#define MATRIX_COLS 16
+#define MATRIX_COLS 15
 
 #define MUXES 6
-//#define MUX_PINS { C2, C3, A0, A1, A2, A3 }
-#define MUX_PINS { C4, C4, C4, C4, C4, C4 }
+#define MUX_PINS { C2, C3, A0, A1, A2, A3 }
+//#define MUX_PINS { C4, C4, C4, C4, C4, C4 }
 #define MUX_SELECTOR_BITS 4
 #define MUX_SELECTOR_PINS { B15, B14, B13, B12 }
 
@@ -22,7 +22,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 
 #define EECONFIG_KB_DATA_SIZE 6
 
-//#define DEBUG_ENABLE
+#define DEBUG_ENABLE
 #define DEBUG_MATRIX_SCAN_RATE
 
 #define I2C1_SCL_PIN B6
