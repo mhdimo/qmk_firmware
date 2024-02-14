@@ -6,7 +6,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #define MATRIX_COLS 15
 
 #define MUXES 6
-#define MUX_PINS { C2, C3, A0, A1, A2, A3 }
+#define MUX_PINS { A2, A3, A6, A7, B12, B14 }
 //#define MUX_PINS { C4, C4, C4, C4, C4, C4 }
 #define MUX_SELECTOR_BITS 4
 #define MUX_SELECTOR_PINS { B15, B14, B13, B12 }
