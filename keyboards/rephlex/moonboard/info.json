@@ -7,15 +7,16 @@
   "features": {
     "bootmagic": false,
     "mousekey": false,
-    "extrakey": false,
+    "extrakey": true,
     "console": true,
-    "uniode": false,
+    "uniode": true,
     "command": false,
     "nkro": true,
     "rgb_matrix": true,
-    "oled": false,
+    "oled": true,
     "deferred_exec": true,
-    "audio": false
+    "audio": true,
+    "encoder": true
   },
   "encoder": {
     "rotary": [

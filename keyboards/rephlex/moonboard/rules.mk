@@ -7,5 +7,4 @@ CUSTOM_MATRIX = lite
 
 OPT = 2
 
-ENCODER_MAP_ENABLE = yes
 AUDIO_DRIVER = dac_additive
