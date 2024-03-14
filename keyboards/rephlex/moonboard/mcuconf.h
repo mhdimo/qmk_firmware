@@ -39,3 +39,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #define STM32_PLLMUL_VALUE          9
 #undef  STM32_USBPRE
 #define STM32_USBPRE                STM32_USBPRE_DIV1P5
+#undef  STM32_I2C1SW
+#define STM32_I2C1SW                STM32_I2C1SW_SYSCLK
+#undef  STM32_PPRE1
+#define STM32_PPRE1                 STM32_PPRE1_DIV2
