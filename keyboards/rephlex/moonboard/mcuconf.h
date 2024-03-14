@@ -7,6 +7,15 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #undef STM32_ADC_USE_ADC1
 #define STM32_ADC_USE_ADC1 TRUE
 
+#undef STM32_ADC_USE_ADC2
+#define STM32_ADC_USE_ADC2 TRUE
+
+#undef STM32_ADC_USE_ADC3
+#define STM32_ADC_USE_ADC3 TRUE
+
+#undef STM32_ADC_USE_ADC4
+#define STM32_ADC_USE_ADC4 TRUE
+
 #undef STM32_I2C_USE_I2C1
 #define STM32_I2C_USE_I2C1 TRUE
 
