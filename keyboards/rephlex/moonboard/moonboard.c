@@ -79,7 +79,6 @@ void eeconfig_init_kb() {
 }
 
 void keyboard_post_init_kb(void) {
-    rgb_matrix_mode(RGB_MATRIX_RAINBOW_MOVING_CHEVRON);
 #ifdef DEFERRED_EXEC_ENABLE
 #    ifdef DEBUG_ENABLE
     debug_token = defer_exec(1000, debug_print_callback, NULL);

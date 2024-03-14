@@ -9,14 +9,14 @@
     "mousekey": false,
     "extrakey": true,
     "console": true,
-    "uniode": true,
+    "unicode": true,
     "command": false,
     "nkro": true,
-    "rgb_matrix": true,
-    "oled": true,
+    "rgb_matrix": false,
+    "oled": false,
     "deferred_exec": true,
-    "audio": true,
-    "encoder": true
+    "audio": false,
+    "encoder": false
   },
   "encoder": {
     "rotary": [
@@ -36,13 +36,13 @@
     "vid": "0x4D4F"
   },
   "ws2812": {
-    "pin": "C3",
+    "pin": "B8",
     "driver": "pwm"
   },
   "rgb_matrix": {
     "driver": "ws2812",
     "max_brightness": 255,
-    "default_brightness": 128,
+    "default_brightness": 16,
     "led_count": 81,
     "sleep": true,
     "animations": {

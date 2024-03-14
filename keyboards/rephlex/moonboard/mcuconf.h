@@ -21,4 +21,11 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #undef STM32_DAC_USE_DAC1_CH2
 #define STM32_DAC_USE_DAC1_CH2              TRUE
 #undef STM32_GPT_USE_TIM6
-#define STM32_GPT_USE_TIM6                  TRUE
+#define STM32_GPT_USE_TIM6                  TRUE*/
+
+#undef  STM32_PREDIV_VALUE
+#define STM32_PREDIV_VALUE                  1
+#undef  STM32_PLLMUL_VALUE
+#define STM32_PLLMUL_VALUE                  3
+#undef  STM32_USBPRE
+#define STM32_USBPRE                        STM32_USBPRE_DIV1
