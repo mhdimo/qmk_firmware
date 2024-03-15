@@ -9,4 +9,4 @@ OPT = 2
 
 AUDIO_DRIVER = dac_additive
 
-EEPROM_DRIVER = transient
+#EEPROM_DRIVER = transient
