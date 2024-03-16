@@ -22,8 +22,8 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 // #undef STM32_PWM_USE_ADVANCED
 // #define STM32_PWM_USE_ADVANCED      TRUE
 
-// #undef STM32_PWM_USE_TIM16
-// #define STM32_PWM_USE_TIM16          TRUE
+#undef STM32_PWM_USE_TIM16
+#define STM32_PWM_USE_TIM16          TRUE
 
 #undef STM32_DAC_USE_DAC1_CH1
 #define STM32_DAC_USE_DAC1_CH1      TRUE
