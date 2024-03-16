@@ -37,7 +37,8 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
             pin_t pin = mux_pins[mux];
 
             analog_key_t *key = &keys[current_row][current_col];
-            key->value = lut[analogReadPin(pin) + key->offset];
+            key->raw = analogReadPin(pin);
+            key->value = lut[key->raw + key->offset];
             key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
 
             switch (g_config.mode) {

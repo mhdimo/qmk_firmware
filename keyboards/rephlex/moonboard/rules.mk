@@ -7,6 +7,6 @@ CUSTOM_MATRIX = lite
 
 OPT = 2
 
-AUDIO_DRIVER = dac_additive
+AUDIO_DRIVER = dac_basic
 
 #EEPROM_DRIVER = transient

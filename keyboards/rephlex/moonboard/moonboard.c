@@ -12,7 +12,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "multiplexer.h"
 
 analog_config g_config = {
-    .mode = dynamic_actuation,
+    .mode = static_actuation,
     .actuation_point = 32,
     .press_sensitivity = 32,
     .release_sensitivity = 32,
@@ -38,7 +38,7 @@ bool           debug_print(void) {
         for (uint8_t col = 0; col < MATRIX_COLS; col++) {
             analog_key_t *key = &keys[row][col];
             char   temp[6];
-            snprintf(temp, sizeof(temp), "%5u", key->value);
+            snprintf(temp, sizeof(temp), "%5u", key->raw);
             strcat(buffer, temp);
         }
         strcat(buffer, "\n");

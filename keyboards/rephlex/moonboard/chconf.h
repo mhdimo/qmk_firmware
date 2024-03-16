@@ -23,7 +23,7 @@
 
 // #define CH_CFG_ST_RESOLUTION 32
 
-// #define CH_CFG_ST_FREQUENCY 1000000
+// #define CH_CFG_ST_FREQUENCY 20000
 
 #include_next <chconf.h>
 
