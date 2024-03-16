@@ -9,7 +9,7 @@
     "mousekey": false,
     "extrakey": true,
     "console": true,
-    "uniode": true,
+    "unicode": true,
     "command": false,
     "nkro": true,
     "rgb_matrix": true,

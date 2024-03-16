@@ -4,6 +4,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "multiplexer.h"
 
 const pin_t mux_pins[MUXES] = MUX_PINS;
+const uint8_t mux_adcs[MUXES] = MUX_ADCS;
 const pin_t mux_selector_pins[MUX_SELECTOR_BITS] = MUX_SELECTOR_PINS;
 
 void multiplexer_init(void) {

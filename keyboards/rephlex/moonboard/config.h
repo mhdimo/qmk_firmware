@@ -6,10 +6,10 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #define MATRIX_COLS 15
 
 #define MUXES 6
-#define MUX_PINS { A2, A3, A6, A7, B12, B14 }
-//#define MUX_PINS { C4, C4, C4, C4, C4, C4 }
+#define MUX_PINS { A0, A1, A6, A7, B1, B12 }
+#define MUX_ADCS { 1, 1, 2, 2, 3, 4 }
 #define MUX_SELECTOR_BITS 4
-#define MUX_SELECTOR_PINS { B15, B14, B13, B12 }
+#define MUX_SELECTOR_PINS { B4, B5, B6, B7 }
 
 #define MUX_CHANNELS ( 1 << MUX_SELECTOR_BITS )
 
@@ -25,8 +25,8 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 //#define DEBUG_ENABLE
 #define DEBUG_MATRIX_SCAN_RATE
 
-#define I2C1_SCL_PIN B6
-#define I2C1_SDA_PIN B7
+#define I2C1_SCL_PIN A15
+#define I2C1_SDA_PIN A14
 #define I2C1_CLOCK_SPEED 400000
 #define I2C1_DUTY_CYCLE FAST_DUTY_CYCLE_16_9
 #define OLED_BRIGHTNESS 128
