@@ -79,9 +79,6 @@ void eeconfig_init_kb() {
 }
 
 void keyboard_post_init_kb(void) {
-    #ifdef RGB_MATRIX_ENABLE
-    rgb_matrix_set_color_all(0, 30, 30);
-    #endif
 #ifdef DEFERRED_EXEC_ENABLE
 #    ifdef DEBUG_ENABLE
     debug_token = defer_exec(1000, debug_print_callback, NULL);

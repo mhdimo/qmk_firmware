@@ -13,11 +13,14 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "lut.h"
 
 analog_key_t         keys[MATRIX_ROWS][MATRIX_COLS]        = {0};
+adc_mux targets[MUXES];
 
 void matrix_init_custom(void) {
     generate_lut();
     multiplexer_init();
-
+    for(uint8_t mux=0; mux < MUXES; mux++) {
+        targets[mux] = pinToMux(mux_pins[mux]);
+    }
     get_sensor_offsets();
     wait_ms(100); // Let ADC reach steady state
     get_sensor_offsets();
@@ -34,10 +37,11 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
             uint8_t current_col = mux_index[mux][channel_greycoded].col;
 
             if (current_row == 255 || current_col == 255) continue;     // NC mux pin
-            pin_t pin = mux_pins[mux];
+            //pin_t pin = mux_pins[mux];
 
             analog_key_t *key = &keys[current_row][current_col];
-            key->raw = analogReadPin(pin);
+            // key->raw = analogReadPin(pin);
+            key->raw = adc_read(targets[mux]);
             key->value = lut[key->raw + key->offset];
             key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
 
