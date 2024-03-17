@@ -33,7 +33,7 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
             uint8_t current_row = mux_index[mux][channel_greycoded].row;
             uint8_t current_col = mux_index[mux][channel_greycoded].col;
 
-            if (current_row == 255 || current_col == 255) continue;
+            if (current_row == 255 || current_col == 255) continue;     // NC mux pin
             pin_t pin = mux_pins[mux];
 
             analog_key_t *key = &keys[current_row][current_col];
