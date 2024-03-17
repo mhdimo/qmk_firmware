@@ -14,7 +14,8 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 
 analog_key_t         keys[MATRIX_ROWS][MATRIX_COLS]        = {0};
 adc_mux targets[MUXES];
-
+uint32_t matrix_size;
+matrix_row_t previous_matrix[MATRIX_ROWS];
 void matrix_init_custom(void) {
     generate_lut();
     multiplexer_init();
@@ -22,13 +23,14 @@ void matrix_init_custom(void) {
         targets[mux] = pinToMux(mux_pins[mux]);
     }
     get_sensor_offsets();
+    matrix_size = sizeof(previous_matrix);
     wait_ms(100); // Let ADC reach steady state
     get_sensor_offsets();
 }
 
-matrix_row_t previous_matrix[MATRIX_ROWS];
+
 bool matrix_scan_custom(matrix_row_t current_matrix[]) {
-    memcpy(previous_matrix, current_matrix, sizeof(previous_matrix));
+    memcpy(previous_matrix, current_matrix, matrix_size);
     for (uint8_t channel = 0; channel < MUX_CHANNELS; channel++) {
         uint8_t channel_greycoded = (channel >> 1) ^ channel;
         select_mux(channel_greycoded);
@@ -62,5 +64,5 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
             }
         }
     }
-    return memcmp(previous_matrix, current_matrix, sizeof(previous_matrix)) != 0;
+    return memcmp(previous_matrix, current_matrix, matrix_size) != 0;
 }
