@@ -40,6 +40,7 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
         while (!adcIsBufferComplete(&ADCD1)) {
         }
         // TODO: Translate the sample to ADC pin
+        // TODO: Fix logic error of sample indexing
         for (uint8_t sample = 0; sample < 2; sample++) {
             current_row = mux_index[sample][channel].row;
             current_col = mux_index[sample][channel].col;
