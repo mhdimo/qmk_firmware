@@ -2126,5 +2126,6 @@
         "keyboards/smoll",
         "keyboards/zigotica",
         "keyboards/zsa"
-    ]
+    ],
+    "lldb.displayFormat": "auto"
 }
