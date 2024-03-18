@@ -1,5 +1,5 @@
-QUANTUM_LIB_SRC += analog.c
-SRC += matrix.c lut.c scanfunctions.c multiplexer.c
+# QUANTUM_LIB_SRC += analog.c
+SRC += matrix.c lut.c scanfunctions.c multiplexer.c custom_analog.c
 
 MCU_LDSCRIPT = STM32F303xB
 
