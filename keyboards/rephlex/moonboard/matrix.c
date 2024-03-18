@@ -44,6 +44,10 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
             key         = &keys[current_row][current_col];
 
             key->raw   = samples1[sample];
+            // Reset the sample buffer for ADC1 to zero
+            for (uint8_t i = 0; i < 2; i++) {
+                sample_buffer[0][i] = 0;
+            }
             key->value = lut[key->raw + key->offset];
             key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
             update_keypress(&current_matrix[current_row], current_col, key);
@@ -59,6 +63,10 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
             key         = &keys[current_row][current_col];
 
             key->raw   = samples2[sample-2];
+            // Reset the sample buffer for ADC2 to zero
+            for (uint8_t i = 0; i < 2; i++) {
+                sample_buffer[1][i] = 0;
+            }
             key->value = lut[key->raw + key->offset];
             key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
             update_keypress(&current_matrix[current_row], current_col, key);
@@ -74,6 +82,10 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
             key         = &keys[current_row][current_col];
 
             key->raw   = samples4[sample-4];
+            // Reset the sample buffer for ADC4 to zero
+            for (uint8_t i = 0; i < 2; i++) {
+                sample_buffer[2][i] = 0;
+            }
             key->value = lut[key->raw + key->offset];
             key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
             update_keypress(&current_matrix[current_row], current_col, key);
