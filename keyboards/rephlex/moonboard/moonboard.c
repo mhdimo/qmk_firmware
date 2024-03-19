@@ -40,7 +40,7 @@ bool debug_print(void) {
         if(!key->raw) {
             snprintf(temp, sizeof(temp), " null   ");
         } else {
-            snprintf(temp, sizeof(temp), "%5u  ", (key->raw + key->offset)); // Include a space for separation
+            snprintf(temp, sizeof(temp), "%5u  ", (key->raw)); // Include a space for separation
         }
         strcat(rowBuffer, temp);
     }
@@ -57,6 +57,7 @@ bool debug_print(void) {
 
 uint32_t debug_print_callback(uint32_t trigger_time, void *cb_arg) {
     debug_print();
+    analogReadPin(A2);
     return 150;
 }
 #    endif

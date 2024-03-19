@@ -5,9 +5,9 @@
 #include "ch.h"
 
 // Buffers to hold ADC conversion results. Size depends on num_channels.
-extern adcsample_t sample_buffer1[2];
-extern adcsample_t sample_buffer2[2];
-extern adcsample_t sample_buffer4[2];
+adcsample_t sample_buffer1[2];
+adcsample_t sample_buffer2[2];
+adcsample_t sample_buffer4[2];
 
 static const ADCConversionGroup CG_ADC1;
 static const ADCConversionGroup CG_ADC2;

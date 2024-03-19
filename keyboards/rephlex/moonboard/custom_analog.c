@@ -7,6 +7,7 @@ static union ConversionCompleteFlags conversion_complete_flags = {0};
 extern adcsample_t sample_buffer1[2];
 extern adcsample_t sample_buffer2[2];
 extern adcsample_t sample_buffer4[2];
+static ADCConfig adcCfg = {};
 
 static const ADCConversionGroup CG_ADC1 = {
     .circular     = false,
@@ -38,7 +39,7 @@ static const ADCConversionGroup CG_ADC4 = {
     .circular     = false,
     .num_channels = 2,
     .end_cb = ADC4_callback,
-    .cfgr = ADC_CFGR_CONT | ADC_RESOLUTION,
+    .cfgr1 = ADC_CFGR_CONT | ADC_RESOLUTION,
     .smpr = {
         ADC_SMPR1_SMP_AN3(ADC_SAMPLING_RATE) |
         ADC_SMPR1_SMP_AN4(ADC_SAMPLING_RATE)
@@ -73,9 +74,9 @@ void init_custom_analog(void) {
     palSetPadMode(GPIOA, 7, PAL_MODE_INPUT_ANALOG);
     palSetPadMode(GPIOB, 12, PAL_MODE_INPUT_ANALOG);
     palSetPadMode(GPIOB, 14, PAL_MODE_INPUT_ANALOG);
-    adcStart(&ADCD1, NULL);
-    adcStart(&ADCD2, NULL);
-    adcStart(&ADCD4, NULL);
+    adcStart(&ADCD1, &adcCfg);
+    adcStart(&ADCD2, &adcCfg);
+    adcStart(&ADCD4, &adcCfg);
 }
 
 void start_adc_conversions(void) {
