@@ -9,7 +9,7 @@
     "mousekey": false,
     "extrakey": true,
     "console": true,
-    "unicode": true,
+    "uniccode": true,
     "command": false,
     "nkro": true,
     "rgb_matrix": false,
@@ -36,15 +36,20 @@
     "vid": "0x4D4F"
   },
   "ws2812": {
-    "pin": "C3",
+    "pin": "B8",
     "driver": "pwm"
   },
   "rgb_matrix": {
     "driver": "ws2812",
-    "max_brightness": 255,
-    "default_brightness": 128,
+    "max_brightness": 32,
+    "default": {
+        "animation": "cycle_all",
+        "val": 30,
+        "speed": 128
+    },
     "led_count": 81,
     "sleep": true,
+    "centre_point": [112, 32],
     "animations": {
       "solid_color": true,
       "alphas_mods": true,

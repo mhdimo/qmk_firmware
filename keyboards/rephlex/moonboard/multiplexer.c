@@ -17,7 +17,8 @@ void multiplexer_init(void) {
 bool select_mux(uint8_t channel) {
     if (channel > MUX_CHANNELS) return 0;
     for (uint8_t i = 0; i < MUX_SELECTOR_BITS; i++) {
-        writePin(mux_selector_pins[i], channel & (1 << i));
+        pin_t pin = mux_selector_pins[i];
+        setPinOutput(pin);
     }
     current_channel = channel;
     return 1;

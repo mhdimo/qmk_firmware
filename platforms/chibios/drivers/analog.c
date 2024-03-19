@@ -282,12 +282,27 @@ __attribute__((weak)) adc_mux pinToMux(pin_t pin) {
         case F3:  return TO_MUX( ADC_CHANNEL_IN6,  2 );
         case F4:  return TO_MUX( ADC_CHANNEL_IN7,  2 );
         case F5:  return TO_MUX( ADC_CHANNEL_IN8,  2 );
-        case F6:  return TO_MUX( ADC_CHANNEL_IN9,  2 );
-        case F7:  return TO_MUX( ADC_CHANNEL_IN10, 2 );
-        case F8:  return TO_MUX( ADC_CHANNEL_IN11, 2 );
-        case F9:  return TO_MUX( ADC_CHANNEL_IN12, 2 );
-        case F10: return TO_MUX( ADC_CHANNEL_IN13, 2 );
-#    endif
+        case F6:  return TO_MUX( ADC_CHANNEL_IN9,  struct hal_adc_configuration_group {
+  129   /**
+  130    * @brief   Enables the circular buffer mode for the group.
+  131    */
+  132   bool                      circular;
+  133   /**
+  134    * @brief   Number of the analog channels belonging to the conversion group.
+  135    */
+  136   adc_channels_num_t        num_channels;
+  137   /**
+  138    * @brief   Callback function associated to the group or @p NULL.
+  139    */
+  140   adccallback_t             end_cb;
+  141   /**
+  142    * @brief   Error callback or @p NULL.
+  143    */
+  144   adcerrorcallback_t        error_cb;
+  145   /* End of the mandatory fields.*/
+  146   adc_lld_configuration_group_fields;
+  147 };
+  148
 #elif defined(STM32G4XX)
         case A0:  return TO_MUX( ADC_CHANNEL_IN1,  0 ); // Can also be ADC2
         case A1:  return TO_MUX( ADC_CHANNEL_IN2,  0 ); // Can also be ADC2

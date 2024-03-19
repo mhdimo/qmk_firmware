@@ -5,14 +5,13 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include <stdbool.h>
 #include "moonboard.h"
 #include "quantum.h"
-#include "analog.h"
 #include "eeprom.h"
 #include "scanfunctions.h"
 #include "print.h"
 #include "multiplexer.h"
 
 analog_config g_config = {
-    .mode = dynamic_actuation,
+    .mode = static_actuation,
     .actuation_point = 32,
     .press_sensitivity = 32,
     .release_sensitivity = 32,
@@ -30,27 +29,34 @@ void bootmagic_lite(void) {
 
 #    ifdef DEBUG_ENABLE
 deferred_token debug_token;
-bool           debug_print(void) {
-    char buffer[MATRIX_ROWS * MATRIX_COLS * 5 + MATRIX_ROWS * 2];
-    buffer[0] = '\0';
-
-    for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
-        for (uint8_t col = 0; col < MATRIX_COLS; col++) {
-            analog_key_t *key = &keys[row][col];
-            char   temp[6];
-            snprintf(temp, sizeof(temp), "%5u", key->value);
-            strcat(buffer, temp);
+bool debug_print(void) {
+    static char rowBuffer[MATRIX_COLS * 6 + 1]; // +1 for '\0'
+    static char temp[8];
+    static uint8_t row = 0;
+    rowBuffer[0] = '\0'; // Initialize the row buffer
+    for (uint8_t col = 0; col < MATRIX_COLS; col++) {
+        analog_key_t *key = &keys[row][col];
+        if(!key->raw) {
+            snprintf(temp, sizeof(temp), " null   ");
+        } else {
+            snprintf(temp, sizeof(temp), "%5u  ", (key->raw)); // Include a space for separation
         }
-        strcat(buffer, "\n");
+        strcat(rowBuffer, temp);
     }
-
-    uprintf("Analog values:\n%s", buffer);
+    strcat(rowBuffer, "\n");
+    uprintf("%s", rowBuffer);
+    row++;
+    if(row >= MATRIX_ROWS) {
+        row = 0;
+        uprintf("\n");
+        return false;
+    }
     return true;
 }
 
 uint32_t debug_print_callback(uint32_t trigger_time, void *cb_arg) {
     debug_print();
-    return 25;
+    return 150;
 }
 #    endif
 
@@ -79,9 +85,6 @@ void eeconfig_init_kb() {
 }
 
 void keyboard_post_init_kb(void) {
-    #ifdef RGB_MATRIX_ENABLE
-    rgb_matrix_mode(RGB_MATRIX_RAINBOW_MOVING_CHEVRON);
-    #endif
 #ifdef DEFERRED_EXEC_ENABLE
 #    ifdef DEBUG_ENABLE
     debug_token = defer_exec(1000, debug_print_callback, NULL);
