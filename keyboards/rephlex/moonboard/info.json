@@ -12,11 +12,11 @@
     "unicode": true,
     "command": false,
     "nkro": true,
-    "rgb_matrix": true,
-    "oled": true,
+    "rgb_matrix": false,
+    "oled": false,
     "deferred_exec": true,
-    "audio": true,
-    "encoder": true
+    "audio": false,
+    "encoder": false
   },
   "encoder": {
     "rotary": [
