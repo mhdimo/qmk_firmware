@@ -13,7 +13,7 @@ static const ADCConversionGroup CG_ADC1 = {
     .circular     = false,
     .num_channels = 2,
     .end_cb = ADC1_callback,
-    .cfgr = ADC_CFGR_CONT | ADC_RESOLUTION,
+    .cfgr = ADC_RESOLUTION,
     .smpr = {
         ADC_SMPR1_SMP_AN3(ADC_SAMPLING_RATE) |
         ADC_SMPR1_SMP_AN4(ADC_SAMPLING_RATE)
@@ -26,7 +26,7 @@ static const ADCConversionGroup CG_ADC2 = {
     .circular     = false,
     .num_channels = 2,
     .end_cb = ADC2_callback,
-    .cfgr = ADC_CFGR_CONT | ADC_RESOLUTION,
+    .cfgr = ADC_RESOLUTION,
     .smpr = {
         ADC_SMPR1_SMP_AN3(ADC_SAMPLING_RATE) |
         ADC_SMPR1_SMP_AN4(ADC_SAMPLING_RATE)
@@ -39,7 +39,7 @@ static const ADCConversionGroup CG_ADC4 = {
     .circular     = false,
     .num_channels = 2,
     .end_cb = ADC4_callback,
-    .cfgr1 = ADC_CFGR_CONT | ADC_RESOLUTION,
+    .cfgr = ADC_RESOLUTION,
     .smpr = {
         ADC_SMPR1_SMP_AN3(ADC_SAMPLING_RATE) |
         ADC_SMPR1_SMP_AN4(ADC_SAMPLING_RATE)

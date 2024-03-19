@@ -5,7 +5,6 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include <stdbool.h>
 #include "moonboard.h"
 #include "quantum.h"
-#include "analog.h"
 #include "eeprom.h"
 #include "scanfunctions.h"
 #include "print.h"
@@ -57,7 +56,6 @@ bool debug_print(void) {
 
 uint32_t debug_print_callback(uint32_t trigger_time, void *cb_arg) {
     debug_print();
-    analogReadPin(A2);
     return 150;
 }
 #    endif
