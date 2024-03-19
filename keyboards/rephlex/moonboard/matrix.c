@@ -43,14 +43,14 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
             if (current_row == 255 || current_col == 255) continue;     // NC mux pin
             key         = &keys[current_row][current_col];
 
-            key->raw   = samples1[sample];
-            // Reset the sample buffer for ADC1 to zero
-            for (uint8_t i = 0; i < 2; i++) {
-                sample_buffer[0][i] = 0;
-            }
+            key->raw   = sample_buffer1[sample];
             key->value = lut[key->raw + key->offset];
             key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
             update_keypress(&current_matrix[current_row], current_col, key);
+        }
+        // Reset the sample buffer for ADC1 to zero
+        for (uint8_t i = 0; i < 2; i++) {
+            sample_buffer1[i] = 0;
         }
 
         while (check_adc_conversion_complete(2)) {
@@ -62,14 +62,14 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
             if (current_row == 255 || current_col == 255) continue;     // NC mux pin
             key         = &keys[current_row][current_col];
 
-            key->raw   = samples2[sample-2];
-            // Reset the sample buffer for ADC2 to zero
-            for (uint8_t i = 0; i < 2; i++) {
-                sample_buffer[1][i] = 0;
-            }
+            key->raw   = sample_buffer2[sample-2];
             key->value = lut[key->raw + key->offset];
             key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
             update_keypress(&current_matrix[current_row], current_col, key);
+        }
+        // Reset the sample buffer for ADC2 to zero
+        for (uint8_t i = 0; i < 2; i++) {
+            sample_buffer2[i] = 0;
         }
 
         while (check_adc_conversion_complete(4)) {
@@ -81,16 +81,15 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
             if (current_row == 255 || current_col == 255) continue;     // NC mux pin
             key         = &keys[current_row][current_col];
 
-            key->raw   = samples4[sample-4];
-            // Reset the sample buffer for ADC4 to zero
-            for (uint8_t i = 0; i < 2; i++) {
-                sample_buffer[2][i] = 0;
-            }
+            key->raw   = sample_buffer4[sample-4];
             key->value = lut[key->raw + key->offset];
             key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
             update_keypress(&current_matrix[current_row], current_col, key);
         }
-
+        // Reset the sample buffer for ADC4 to zero
+        for (uint8_t i = 0; i < 2; i++) {
+            sample_buffer4[i] = 0;
+        }
 
     }
     return memcmp(previous_matrix, current_matrix, matrix_size) != 0;

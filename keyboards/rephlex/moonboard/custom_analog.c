@@ -3,11 +3,10 @@
 
 #define ADC_SAMPLING_RATE ADC_SMPR_SMP_1P5
 
-adcsample_t sample_buffer[3][2];
-adcsample_t *samples1 = sample_buffer[0];
-adcsample_t *samples2 = sample_buffer[1];
-adcsample_t *samples4 = sample_buffer[2];
 static union ConversionCompleteFlags conversion_complete_flags = {0};
+extern adcsample_t sample_buffer1[2];
+extern adcsample_t sample_buffer2[2];
+extern adcsample_t sample_buffer4[2];
 
 static const ADCConversionGroup CG_ADC1 = {
     .circular     = false,
@@ -80,9 +79,9 @@ void init_custom_analog(void) {
 }
 
 void start_adc_conversions(void) {
-    adcStartConversion(&ADCD1, &CG_ADC1, samples1, 2);
-    adcStartConversion(&ADCD2, &CG_ADC2, samples2, 2);
-    adcStartConversion(&ADCD4, &CG_ADC4, samples4, 2);
+    adcStartConversion(&ADCD1, &CG_ADC1, sample_buffer1, 2);
+    adcStartConversion(&ADCD2, &CG_ADC2, sample_buffer2, 2);
+    adcStartConversion(&ADCD4, &CG_ADC4, sample_buffer4, 2);
 }
 
 bool check_adc_conversion_complete(uint8_t ADC) {
