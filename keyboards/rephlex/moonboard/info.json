@@ -12,7 +12,7 @@
     "unicode": true,
     "command": false,
     "nkro": true,
-    "rgb_matrix": true,
+    "rgb_matrix": false,
     "oled": true,
     "deferred_exec": true,
     "audio": true,
