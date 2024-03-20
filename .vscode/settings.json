@@ -1034,7 +1034,21 @@
         "keyboards/ztboards": true,
         "keyboards/zvecr": true,
         "keyboards/zwag": true,
-        "keyboards/zykrah": true
+        "keyboards/zykrah": true,
+        "keyboards/compensator": true,
+        "keyboards/fs_streampad": true,
+        "keyboards/galile0": true,
+        "keyboards/jidohun": true,
+        "keyboards/joshajohnson": true,
+        "keyboards/kbdmania": true,
+        "keyboards/kezewa": true,
+        "keyboards/kira": true,
+        "keyboards/kumaokobo": true,
+        "keyboards/laneware": true,
+        "keyboards/moky": true,
+        "keyboards/monokei": true,
+        "keyboards/null": true,
+        "keyboards/orthograph": true
     },
     "files.associations": {
         "*.h": "c",
@@ -2079,6 +2093,20 @@
         "keyboards/ztboards",
         "keyboards/zvecr",
         "keyboards/zwag",
-        "keyboards/zykrah"
+        "keyboards/zykrah",
+        "keyboards/compensator",
+        "keyboards/fs_streampad",
+        "keyboards/galile0",
+        "keyboards/jidohun",
+        "keyboards/joshajohnson",
+        "keyboards/kbdmania",
+        "keyboards/kezewa",
+        "keyboards/kira",
+        "keyboards/kumaokobo",
+        "keyboards/laneware",
+        "keyboards/moky",
+        "keyboards/monokei",
+        "keyboards/null",
+        "keyboards/orthograph"
     ]
 }

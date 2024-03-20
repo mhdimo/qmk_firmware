@@ -36,9 +36,13 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
 
             if (current_row == 255 || current_col == 255) continue;     // NC mux pin
 
+            adc_start();
+            while(!conversion_done) {
+            }
             analog_key_t *key = &keys[current_row][current_col];
-            key->raw = adc_read();
+            key->raw = adcSample[0];
             key->value = 1;
+
             /*key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
 
             switch (g_config.mode) {
