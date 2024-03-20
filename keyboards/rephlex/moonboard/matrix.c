@@ -6,21 +6,18 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include <stdlib.h>
 #include "print.h"
 #include "quantum.h"
-#include "analog.h"
+#include "custom_analog.h"
 #include "lut.h"
 #include "multiplexer.h"
 #include "scanfunctions.h"
 #include "lut.h"
 
 analog_key_t         keys[MATRIX_ROWS][MATRIX_COLS]        = {0};
-adc_mux targets[MUXES];
 
 void matrix_init_custom(void) {
     generate_lut();
     multiplexer_init();
-    for(uint8_t mux=0; mux < MUXES; mux++) {
-        targets[mux] = pinToMux(mux_pins[mux]);
-    }
+    adc_init();
     get_sensor_offsets();
     wait_ms(100); // Let ADC reach steady state
     get_sensor_offsets();
@@ -32,16 +29,17 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     for (uint8_t channel = 0; channel < MUX_CHANNELS; channel++) {
         uint8_t channel_greycoded = (channel >> 1) ^ channel;
         select_mux(channel_greycoded);
-        for (uint8_t mux = 0; mux < MUXES; mux++) {
+
+        for (uint8_t mux = 0; mux < 1; mux++) {
             uint8_t current_row = mux_index[mux][channel_greycoded].row;
             uint8_t current_col = mux_index[mux][channel_greycoded].col;
 
             if (current_row == 255 || current_col == 255) continue;     // NC mux pin
 
             analog_key_t *key = &keys[current_row][current_col];
-            key->raw = adc_read(targets[mux]);
-            key->value = lut[key->raw + key->offset];
-            key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
+            key->raw = adc_read();
+            key->value = 1;
+            /*key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
 
             switch (g_config.mode) {
                 case dynamic_actuation:
@@ -57,7 +55,7 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
                 default:
                     bootloader_jump();
                     break;
-            }
+            }*/
         }
     }
     return memcmp(previous_matrix, current_matrix, sizeof(previous_matrix)) != 0;

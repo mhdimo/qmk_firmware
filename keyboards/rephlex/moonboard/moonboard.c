@@ -5,7 +5,6 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include <stdbool.h>
 #include "moonboard.h"
 #include "quantum.h"
-#include "analog.h"
 #include "eeprom.h"
 #include "scanfunctions.h"
 #include "print.h"
