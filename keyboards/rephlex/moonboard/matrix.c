@@ -18,7 +18,7 @@ void matrix_init_custom(void) {
     generate_lut();
     multiplexer_init();
     get_sensor_offsets();
-    wait_ms(3000); // Let ADC reach steady state
+    wait_ms(100); // Let ADC reach steady state
     adc_init();
     get_sensor_offsets();
 }
@@ -36,11 +36,10 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
 
             if (current_row == 255 || current_col == 255) continue;     // NC mux pin
 
-            adc_start();
-            while(!is_adc_conversion_done()) {
-            }
+            adc_start_conversion();
+            wait_us(1);
             analog_key_t *key = &keys[current_row][current_col];
-            key->raw = sampleBuffer[0];
+            key->raw = adc1_sample;
             key->value = 1;
 
             /*key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);

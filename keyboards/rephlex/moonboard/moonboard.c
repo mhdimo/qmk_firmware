@@ -56,7 +56,7 @@ bool debug_print(void) {
 
 uint32_t debug_print_callback(uint32_t trigger_time, void *cb_arg) {
     debug_print();
-    return 25;
+    return 100;
 }
 #    endif
 

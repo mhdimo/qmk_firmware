@@ -4,6 +4,6 @@
 #include <ch.h>
 
 void adc_init(void);
-void adc_start(void);
-adcsample_t sampleBuffer[1];
-bool is_adc_conversion_done(void);
+void adc_start_conversion(void);
+adcsample_t adc1_sample;
+bool sample_complete;
