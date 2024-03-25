@@ -5,5 +5,4 @@
 
 void adc_init(void);
 void adc_start_conversion(void);
-adcsample_t adc1_sample;
-bool sample_complete;
+adcsample_t adc_samples[6];

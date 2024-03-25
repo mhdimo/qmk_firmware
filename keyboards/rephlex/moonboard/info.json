@@ -13,9 +13,9 @@
     "command": false,
     "nkro": true,
     "rgb_matrix": false,
-    "oled": true,
+    "oled": false,
     "deferred_exec": true,
-    "audio": true,
+    "audio": false,
     "encoder": true
   },
   "encoder": {

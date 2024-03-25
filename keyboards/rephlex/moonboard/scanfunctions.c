@@ -5,17 +5,11 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "lut.h"
 
 void         get_sensor_offsets(void) {
-    //uint16_t rest_adc_value = distance_to_adc(0);
-    for (uint8_t channel = 0; channel < MUX_CHANNELS; channel++) {
-        uint8_t channel_greycoded = (channel >> 1) ^ channel;
-        select_mux(channel_greycoded);
-        for (uint8_t mux = 0; mux < MUXES; mux++) {
-            //uint8_t current_row = mux_index[mux][channel_greycoded].row;
-            //uint8_t current_col = mux_index[mux][channel_greycoded].col;
-
-            //pin_t pin = mux_pins[mux];
-
-            //keys[current_row][current_col].offset = rest_adc_value - analogReadPin(pin);
+    uint16_t rest_adc_value = distance_to_adc(0);
+    for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
+        for (uint8_t col = 0; col < MATRIX_COLS; col++) {
+            analog_key_t *key = &keys[row][col];
+            key->offset = rest_adc_value - key->raw;
         }
     }
 }

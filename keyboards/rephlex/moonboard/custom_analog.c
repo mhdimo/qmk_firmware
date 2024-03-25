@@ -1,27 +1,47 @@
 #include "custom_analog.h"
 #include "gpio.h"
 #include "print.h"
+#include "multiplexer.h"
 
 #define ADC_SAMPLING_RATE ADC_SMPR_SMP_1P5
-static adcsample_t sampleBuffer[1];
+static adcsample_t sampleBuffer1[2];
+static adcsample_t sampleBuffer2[2];
+static adcsample_t sampleBuffer4[2];
 
-static void adc_callback(ADCDriver *adcp) {
+static void adc1_callback(ADCDriver *adcp) {
     if (adcp->state != ADC_COMPLETE) {
         return;
     }
-    adc1_sample = sampleBuffer[0];
-    sample_complete = true;
+    adc_samples[0] = sampleBuffer1[0];
+    adc_samples[1] = sampleBuffer1[1];
+}
+
+static void adc2_callback(ADCDriver *adcp) {
+    if (adcp->state != ADC_COMPLETE) {
+        return;
+    }
+    adc_samples[2] = sampleBuffer2[0];
+    adc_samples[3] = sampleBuffer2[1];
+}
+
+static void adc4_callback(ADCDriver *adcp) {
+    if (adcp->state != ADC_COMPLETE) {
+        return;
+    }
+    adc_samples[4] = sampleBuffer4[0];
+    adc_samples[5] = sampleBuffer4[1];
 }
 
 static void adc_error_callback(ADCDriver *adcp, adcerror_t err) {
     (void)adcp;
-    uprintf("ADC error: %ld\n", err);
+    (void)err;
+    //uprintf("ADC error: %ld\n", err);
 }
 
-static const ADCConversionGroup adcConversionGroup = {
+static const ADCConversionGroup adc1ConversionGroup = {
   .circular     = false,
-  .num_channels = 1,
-  .end_cb       = adc_callback,
+  .num_channels = 2,
+  .end_cb       = adc1_callback,
   .error_cb     = adc_error_callback,
   .cfgr         = ADC_CFGR_CONT,
   .tr1          = ADC_TR_DISABLED,
@@ -33,16 +53,59 @@ static const ADCConversionGroup adcConversionGroup = {
     ADC_SMPR1_SMP_AN3(ADC_SMPR_SMP_1P5) | ADC_SMPR1_SMP_AN4(ADC_SMPR_SMP_1P5),
   },
   .sqr          = {
-    ADC_SQR1_SQ1_N(ADC_CHANNEL_IN3)
+    ADC_SQR1_SQ1_N(ADC_CHANNEL_IN3) | ADC_SQR1_SQ2_N(ADC_CHANNEL_IN4),
+  }
+};
+
+static const ADCConversionGroup adc2ConversionGroup = {
+  .circular     = false,
+  .num_channels = 2,
+  .end_cb       = adc2_callback,
+  .error_cb     = adc_error_callback,
+  .cfgr         = ADC_CFGR_CONT,
+  .tr1          = ADC_TR_DISABLED,
+  .tr2          = ADC_TR_DISABLED,
+  .tr3          = ADC_TR_DISABLED,
+  .awd2cr       = 0U,
+  .awd3cr       = 0U,
+  .smpr         = {
+    ADC_SMPR1_SMP_AN3(ADC_SMPR_SMP_1P5) | ADC_SMPR1_SMP_AN4(ADC_SMPR_SMP_1P5),
+  },
+  .sqr          = {
+    ADC_SQR1_SQ1_N(ADC_CHANNEL_IN3) | ADC_SQR1_SQ2_N(ADC_CHANNEL_IN4),
+  }
+};
+
+static const ADCConversionGroup adc4ConversionGroup = {
+  .circular     = false,
+  .num_channels = 2,
+  .end_cb       = adc4_callback,
+  .error_cb     = adc_error_callback,
+  .cfgr         = ADC_CFGR_CONT,
+  .tr1          = ADC_TR_DISABLED,
+  .tr2          = ADC_TR_DISABLED,
+  .tr3          = ADC_TR_DISABLED,
+  .awd2cr       = 0U,
+  .awd3cr       = 0U,
+  .smpr         = {
+    ADC_SMPR1_SMP_AN3(ADC_SMPR_SMP_1P5) | ADC_SMPR1_SMP_AN4(ADC_SMPR_SMP_1P5),
+  },
+  .sqr          = {
+    ADC_SQR1_SQ1_N(ADC_CHANNEL_IN3) | ADC_SQR1_SQ2_N(ADC_CHANNEL_IN4),
   }
 };
 
 void adc_init() {
-    palSetLineMode(A2, PAL_MODE_INPUT_ANALOG);
+    for (uint8_t i = 0; i < MUXES; i++) {
+        palSetLineMode(mux_pins[i], PAL_MODE_INPUT_ANALOG);
+    }
     adcStart(&ADCD1, NULL);
+    adcStart(&ADCD2, NULL);
+    adcStart(&ADCD4, NULL);
 }
 
 void adc_start_conversion() {
-    sample_complete = false;
-    adcStartConversion(&ADCD1, &adcConversionGroup, sampleBuffer, 1);
+    adcStartConversion(&ADCD1, &adc1ConversionGroup, sampleBuffer1, 2);
+    adcStartConversion(&ADCD2, &adc2ConversionGroup, sampleBuffer2, 2);
+    adcStartConversion(&ADCD4, &adc4ConversionGroup, sampleBuffer4, 2);
 }
