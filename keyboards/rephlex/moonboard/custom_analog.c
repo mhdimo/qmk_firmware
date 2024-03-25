@@ -34,8 +34,26 @@ static void adc4_callback(ADCDriver *adcp) {
 
 static void adc_error_callback(ADCDriver *adcp, adcerror_t err) {
     (void)adcp;
-    (void)err;
-    //uprintf("ADC error: %ld\n", err);
+    switch (err) {
+        case ADC_ERR_DMAFAILURE:
+            uprintf("ADC ERROR: DMA failure.\n");
+            break;
+        case ADC_ERR_OVERFLOW:
+            uprintf("ADC ERROR: Overflow.\n");
+            break;
+        case ADC_ERR_AWD1:
+            uprintf("ADC ERROR: Watchdog 1 triggered.\n");
+            break;
+        case ADC_ERR_AWD2:
+            uprintf("ADC ERROR: Watchdog 2 triggered.\n");
+            break;
+        case ADC_ERR_AWD3:
+            uprintf("ADC ERROR: Watchdog 3 triggered.\n");
+            break;
+        default:
+            uprintf("ADC ERROR: Unknown\n");
+            break;
+    }
 }
 
 static const ADCConversionGroup adc1ConversionGroup = {

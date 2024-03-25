@@ -21,11 +21,8 @@ void matrix_init_custom(void) {
     generate_lut();
     multiplexer_init();
     adc_init();
-    while(ADCD1.state != ADC_READY);
-    while(ADCD2.state != ADC_READY);
-    while(ADCD4.state != ADC_READY);
-    matrix_scan_init();
     wait_ms(100);
+    matrix_scan_init();
     get_sensor_offsets();
 }
 
