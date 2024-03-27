@@ -1048,7 +1048,14 @@
         "keyboards/moky": true,
         "keyboards/monokei": true,
         "keyboards/null": true,
-        "keyboards/orthograph": true
+        "keyboards/orthograph": true,
+        "keyboards/rookiebwoy": true,
+        "keyboards/rot13labs": true,
+        "keyboards/sf2040": true,
+        "keyboards/shandoncodes": true,
+        "keyboards/smoll": true,
+        "keyboards/zigotica": true,
+        "keyboards/zsa": true
     },
     "files.associations": {
         "*.h": "c",
@@ -2107,6 +2114,13 @@
         "keyboards/moky",
         "keyboards/monokei",
         "keyboards/null",
-        "keyboards/orthograph"
+        "keyboards/orthograph",
+        "keyboards/rookiebwoy",
+        "keyboards/rot13labs",
+        "keyboards/sf2040",
+        "keyboards/shandoncodes",
+        "keyboards/smoll",
+        "keyboards/zigotica",
+        "keyboards/zsa"
     ]
 }

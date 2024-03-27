@@ -11,7 +11,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "multiplexer.h"
 
 analog_config g_config = {
-    .mode = static_actuation,
+    .mode = dynamic_actuation,
     .actuation_point = 32,
     .press_sensitivity = 32,
     .release_sensitivity = 32,
@@ -39,7 +39,7 @@ bool debug_print(void) {
         if(!key->raw) {
             snprintf(temp, sizeof(temp), " null   ");
         } else {
-            snprintf(temp, sizeof(temp), "%5d  ", key->offset); // Include a space for separation
+            snprintf(temp, sizeof(temp), "%5d  ", key->raw); // Include a space for separation
         }
         strcat(rowBuffer, temp);
     }
