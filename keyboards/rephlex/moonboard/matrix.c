@@ -15,14 +15,13 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include <hal.h>
 
 analog_key_t         keys[MATRIX_ROWS][MATRIX_COLS]        = {0};
-bool matrix_scan_init(void);
 
 void matrix_init_custom(void) {
     generate_lut();
     multiplexer_init();
     adc_init();
+    get_sensor_offsets();
     wait_ms(100);
-    matrix_scan_init();
     get_sensor_offsets();
 }
 
@@ -79,41 +78,4 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
         }
     }
     return memcmp(previous_matrix, current_matrix, sizeof(previous_matrix)) != 0;
-}
-
-bool matrix_scan_init(void) {
-    for (uint8_t channel = 0; channel < MUX_CHANNELS; channel++) {
-        uint8_t channel_greycoded = (channel >> 1) ^ channel;
-        select_mux(channel_greycoded);
-        adcGetConversionAll();
-        for (uint8_t mux = 0; mux < MUXES; mux++) {
-            uint8_t current_row = mux_index[mux][channel_greycoded].row;
-            uint8_t current_col = mux_index[mux][channel_greycoded].col;
-
-            if (current_row == 255 && current_col == 255) continue;     // NC mux pin
-
-            analog_key_t *key = &keys[current_row][current_col];
-            switch(mux) {
-                case 0:
-                    key->raw = sampleBuffer1[0];
-                    break;
-                case 1:
-                    key->raw = sampleBuffer1[1];
-                    break;
-                case 2:
-                    key->raw = sampleBuffer2[0];
-                    break;
-                case 3:
-                    key->raw = sampleBuffer2[1];
-                    break;
-                case 4:
-                    key->raw = sampleBuffer4[0];
-                    break;
-                case 5:
-                    key->raw = sampleBuffer4[1];
-                    break;
-            }
-        }
-    }
-    return true;
 }
