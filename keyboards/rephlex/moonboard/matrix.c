@@ -19,7 +19,7 @@ analog_key_t         keys[MATRIX_ROWS][MATRIX_COLS]        = {0};
 void matrix_init_custom(void) {
     generate_lut();
     multiplexer_init();
-    adc_init();
+    initADCGroups();
     get_sensor_offsets();
     wait_ms(100);
     get_sensor_offsets();
@@ -31,7 +31,7 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     for (uint8_t channel = 0; channel < MUX_CHANNELS; channel++) {
         uint8_t channel_greycoded = (channel >> 1) ^ channel;
         select_mux(channel_greycoded);
-        adcGetConversionAll();
+        adcStartAllConversions();
         for (uint8_t mux = 0; mux < MUXES; mux++) {
             uint8_t current_row = mux_index[mux][channel_greycoded].row;
             uint8_t current_col = mux_index[mux][channel_greycoded].col;
