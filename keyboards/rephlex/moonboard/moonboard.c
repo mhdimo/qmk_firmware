@@ -11,7 +11,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "multiplexer.h"
 
 analog_config g_config = {
-    .mode = dynamic_actuation,
+    .mode = static_actuation,
     .actuation_point = 32,
     .press_sensitivity = 32,
     .release_sensitivity = 32,
@@ -39,7 +39,7 @@ bool debug_print(void) {
         if(!key->raw) {
             snprintf(temp, sizeof(temp), " null   ");
         } else {
-            snprintf(temp, sizeof(temp), "%5d  ", key->raw); // Include a space for separation
+            snprintf(temp, sizeof(temp), "%5d  ", key->value); // Include a space for separation
         }
         strcat(rowBuffer, temp);
     }
@@ -92,6 +92,10 @@ void keyboard_post_init_kb(void) {
     idle_recalibrate_token = defer_exec(300000, idle_recalibrate_callback, NULL);
 #endif
     values_load();
+
+    debug_enable = true;
+    // debug_matrix = true;
+    // debug_keyboard = true;
 }
 
 #ifdef VIA_ENABLE
@@ -205,3 +209,11 @@ bool oled_task_kb() {
     return false;
 }
 #endif
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  // If console is enabled, it will print the matrix position and status of each key pressed
+#ifdef CONSOLE_ENABLE
+    uprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
+#endif
+  return true;
+}
