@@ -53,10 +53,10 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
                     key->raw = sampleBuffer2[1];
                     break;
                 case 4:
-                    key->raw = sampleBuffer4[0];
+                    key->raw = sampleBuffer4[1]; // SWAPPED!!!
                     break;
                 case 5:
-                    key->raw = sampleBuffer4[1];
+                    key->raw = sampleBuffer4[0];
                     break;
             }
             key->value = MIN(lut[key->raw + key->offset] * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
