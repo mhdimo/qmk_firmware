@@ -1,16 +1,22 @@
 /* Copyright 2023 RephlexZero (@RephlexZero)
 SPDX-License-Identifier: GPL-2.0-or-later */
 #include "scanfunctions.h"
-#include "analog.h"
 #include "multiplexer.h"
 #include "lut.h"
 
-void         get_sensor_offsets(void) {
-    uint16_t rest_adc_value = distance_to_adc(0);
+void get_sensor_offsets(void) {
+    const uint16_t rest_adc_value = distance_to_adc(0);
     for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
         for (uint8_t col = 0; col < MATRIX_COLS; col++) {
             analog_key_t *key = &keys[row][col];
-            key->offset = rest_adc_value - key->raw;
+            key->offset = 0;
+        }
+    }
+    matrix_scan();
+    for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
+        for (uint8_t col = 0; col < MATRIX_COLS; col++) {
+            analog_key_t *key = &keys[row][col];
+            key->offset       = rest_adc_value - key->raw;
         }
     }
 }

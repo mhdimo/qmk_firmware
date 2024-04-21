@@ -16,7 +16,7 @@
     "oled": false,
     "deferred_exec": true,
     "audio": false,
-    "encoder": false
+    "encoder": true
   },
   "encoder": {
     "rotary": [

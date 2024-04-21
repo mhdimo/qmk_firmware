@@ -2,10 +2,17 @@
 SPDX-License-Identifier: GPL-2.0-or-later */
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
+#include <stdlib.h>
+#include "print.h"
+#include "quantum.h"
+#include "custom_analog.h"
 #include "lut.h"
 #include "multiplexer.h"
 #include "scanfunctions.h"
-#include "custom_analog.h"
+#include "lut.h"
+#include <ch.h>
+#include <hal.h>
 
 analog_key_t keys[MATRIX_ROWS][MATRIX_COLS] = {0};
 uint32_t     matrix_size;
@@ -16,10 +23,10 @@ void matrix_init_custom(void) {
     init_custom_analog();
     generate_lut();
     multiplexer_init();
-    get_sensor_offsets();
-    matrix_size = sizeof(previous_matrix);
-    wait_ms(100); // Let ADC reach steady state
-    get_sensor_offsets();
+    initADCGroups();
+    for (uint8_t i = 0; i < 100; i++) {
+        get_sensor_offsets();
+    }
 }
 
 bool matrix_scan_custom(matrix_row_t current_matrix[]) {
@@ -27,63 +34,35 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     for (uint8_t channel = 0; channel < MUX_CHANNELS; channel++) {
         uint8_t channel_greycoded = (channel >> 1) ^ channel;
         select_mux(channel_greycoded);
+        adcStartAllConversions();
+        for (uint8_t mux = 0; mux < MUXES; mux++) {
+            uint8_t current_row = mux_index[mux][channel_greycoded].row;
+            uint8_t current_col = mux_index[mux][channel_greycoded].col;
 
-        start_adc_conversions();
-        analog_key_t *key;
-        uint8_t       current_row;
-        uint8_t       current_col;
-        while (check_adc_conversion_complete(1)) {
-        }
-        // TODO: Translate the sample to ADC pin
-        // TODO: Fix logic error of sample indexing
-        for (uint8_t sample = 0; sample < 2; sample++) {
-            current_row = mux_index[sample][channel_greycoded].row;
-            current_col = mux_index[sample][channel_greycoded].col;
-            if (current_row == 255 || current_col == 255) continue;     // NC mux pin
-            key         = &keys[current_row][current_col];
+            if (current_row == 255 && current_col == 255) continue;     // NC mux pin
 
-            key->raw   = sample_buffer1[sample];
-            key->value = lut[key->raw + key->offset];
-            key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
-            update_keypress(&current_matrix[current_row], current_col, key);
-        }
-        // Reset the sample buffer for ADC1 to zero
-        for (uint8_t i = 0; i < 2; i++) {
-            sample_buffer1[i] = 0;
-        }
-
-        while (check_adc_conversion_complete(2)) {
-        }
-
-        for (uint8_t sample = 2; sample < 4; sample++) {
-            current_row = mux_index[sample][channel_greycoded].row;
-            current_col = mux_index[sample][channel_greycoded].col;
-            if (current_row == 255 || current_col == 255) continue;     // NC mux pin
-            key         = &keys[current_row][current_col];
-
-            key->raw   = sample_buffer2[sample-2];
-            key->value = lut[key->raw + key->offset];
-            key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
-            update_keypress(&current_matrix[current_row], current_col, key);
-        }
-        // Reset the sample buffer for ADC2 to zero
-        for (uint8_t i = 0; i < 2; i++) {
-            sample_buffer2[i] = 0;
-        }
-
-        while (check_adc_conversion_complete(4)) {
-        }
-
-        for (uint8_t sample = 4; sample < 6; sample++) {
-            current_row = mux_index[sample][channel_greycoded].row;
-            current_col = mux_index[sample][channel_greycoded].col;
-            if (current_row == 255 || current_col == 255) continue;     // NC mux pin
-            key         = &keys[current_row][current_col];
-
-            key->raw   = sample_buffer4[sample-4];
-            key->value = lut[key->raw + key->offset];
-            key->value = MIN(key->value * CALIBRATION_RANGE / lut[1100 + key->offset], 255);
-
+            analog_key_t *key = &keys[current_row][current_col];
+            switch(mux) {
+                case 0:
+                    key->raw = sampleBuffer1[0];
+                    break;
+                case 1:
+                    key->raw = sampleBuffer1[1];
+                    break;
+                case 2:
+                    key->raw = sampleBuffer2[0];
+                    break;
+                case 3:
+                    key->raw = sampleBuffer2[1];
+                    break;
+                case 4:
+                    key->raw = sampleBuffer4[1]; // SWAPPED!!!
+                    break;
+                case 5:
+                    key->raw = sampleBuffer4[0];
+                    break;
+            }
+            key->value = MIN((lut[key->raw + key->offset]  * CALIBRATION_RANGE) / lut[1100 + key->offset], 255);
             switch (g_config.mode) {
                 case dynamic_actuation:
                     matrix_read_cols_dynamic_actuation(&current_matrix[current_row], current_col, key);

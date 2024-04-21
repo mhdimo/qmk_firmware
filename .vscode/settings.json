@@ -10,10 +10,6 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
-        "**/.build": true,
-        "**/*.hex": true,
-        "**/*.bin": true,
-        "**/*.uf2": true,
         "keyboards/0_sixty": true,
         "keyboards/0xc7": true,
         "keyboards/0xcb": true,
@@ -1035,7 +1031,6 @@
         "keyboards/zvecr": true,
         "keyboards/zwag": true,
         "keyboards/zykrah": true,
-        "keyboards/alphatec/helios_3k/keymaps/via": true,
         "keyboards/compensator": true,
         "keyboards/fs_streampad": true,
         "keyboards/galile0": true,
@@ -1050,7 +1045,6 @@
         "keyboards/monokei": true,
         "keyboards/null": true,
         "keyboards/orthograph": true,
-        "keyboards/planck": true,
         "keyboards/rookiebwoy": true,
         "keyboards/rot13labs": true,
         "keyboards/sf2040": true,
@@ -2103,7 +2097,6 @@
         "keyboards/zvecr",
         "keyboards/zwag",
         "keyboards/zykrah",
-        "keyboards/alphatec/helios_3k/keymaps/via",
         "keyboards/compensator",
         "keyboards/fs_streampad",
         "keyboards/galile0",
@@ -2118,7 +2111,6 @@
         "keyboards/monokei",
         "keyboards/null",
         "keyboards/orthograph",
-        "keyboards/planck",
         "keyboards/rookiebwoy",
         "keyboards/rot13labs",
         "keyboards/sf2040",
@@ -2127,5 +2119,5 @@
         "keyboards/zigotica",
         "keyboards/zsa"
     ],
-    "lldb.displayFormat": "auto"
+    "cmake.sourceDirectory": "/home/jake/qmk_firmware/lib/pico-sdk/src/host/hardware_divider"
 }

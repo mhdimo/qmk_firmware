@@ -9,6 +9,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "scanfunctions.h"
 #include "print.h"
 #include "multiplexer.h"
+#include "lut.h"
 
 analog_config g_config = {
     .mode = static_actuation,
@@ -39,7 +40,7 @@ bool debug_print(void) {
         if(!key->raw) {
             snprintf(temp, sizeof(temp), " null   ");
         } else {
-            snprintf(temp, sizeof(temp), "%5u  ", (key->raw)); // Include a space for separation
+            snprintf(temp, sizeof(temp), "%5d  ", key->value); // Include a space for separation
         }
         strcat(rowBuffer, temp);
     }
@@ -56,7 +57,7 @@ bool debug_print(void) {
 
 uint32_t debug_print_callback(uint32_t trigger_time, void *cb_arg) {
     debug_print();
-    return 150;
+    return 100;
 }
 #    endif
 
@@ -92,6 +93,10 @@ void keyboard_post_init_kb(void) {
     idle_recalibrate_token = defer_exec(300000, idle_recalibrate_callback, NULL);
 #endif
     values_load();
+
+    debug_enable = true;
+    // debug_matrix = true;
+    // debug_keyboard = true;
 }
 
 #ifdef VIA_ENABLE
@@ -205,3 +210,11 @@ bool oled_task_kb() {
     return false;
 }
 #endif
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  // If console is enabled, it will print the matrix position and status of each key pressed
+#ifdef CONSOLE_ENABLE
+    uprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
+#endif
+  return true;
+}

@@ -1,92 +1,81 @@
-#include "config.h"
 #include "custom_analog.h"
+#include "print.h"
+#include "multiplexer.h"
 
-#define ADC_SAMPLING_RATE ADC_SMPR_SMP_1P5
+#define ADC_SAMPLING_RATE ADC_SMPR_SMP_2P5
 
-static union ConversionCompleteFlags conversion_complete_flags = {0};
-extern adcsample_t sample_buffer1[2];
-extern adcsample_t sample_buffer2[2];
-extern adcsample_t sample_buffer4[2];
-static ADCConfig adcCfg = {};
+static binary_semaphore_t adcSemaphore;
+static int completed_conversions = 0;
 
-static const ADCConversionGroup CG_ADC1 = {
-    .circular     = false,
-    .num_channels = 2,
-    .end_cb = ADC1_callback,
-    .cfgr = ADC_RESOLUTION,
-    .smpr = {
-        ADC_SMPR1_SMP_AN3(ADC_SAMPLING_RATE) |
-        ADC_SMPR1_SMP_AN4(ADC_SAMPLING_RATE)
-    },
-    .sqr = {
-        ADC_SQR1_SQ1_N(ADC_CHANNEL_IN3) | ADC_SQR1_SQ2_N(ADC_CHANNEL_IN4)
+void adcCompleteCallback(ADCDriver *adcp) {
+    osalSysLockFromISR();
+    completed_conversions++;
+    if (completed_conversions == 3) {
+        chBSemSignalI(&adcSemaphore);
     }
+    osalSysUnlockFromISR();
+}
+
+void adcErrorCallback(ADCDriver *adcp, adcerror_t err) {
+    (void)adcp;
+    switch (err) {
+        case ADC_ERR_DMAFAILURE:
+            uprintf("ADC ERROR: DMA failure.\n");
+            break;
+        case ADC_ERR_OVERFLOW:
+            uprintf("ADC ERROR: Overflow.\n");
+            break;
+        case ADC_ERR_AWD1:
+            uprintf("ADC ERROR: Watchdog 1 triggered.\n");
+            break;
+        case ADC_ERR_AWD2:
+            uprintf("ADC ERROR: Watchdog 2 triggered.\n");
+            break;
+        case ADC_ERR_AWD3:
+            uprintf("ADC ERROR: Watchdog 3 triggered.\n");
+            break;
+        default:
+            uprintf("ADC ERROR: Unknown\n");
+            break;
+    }
+}
+
+static const ADCConversionGroup adcConversionGroup = {
+  .circular     = false,
+  .num_channels = 2U,
+  .end_cb       = adcCompleteCallback,
+  .error_cb     = adcErrorCallback,
+  .cfgr         = ADC_RESOLUTION,
+  .tr1          = ADC_TR_DISABLED,
+  .tr2          = ADC_TR_DISABLED,
+  .tr3          = ADC_TR_DISABLED,
+  .awd2cr       = 0U,
+  .awd3cr       = 0U,
+  .smpr         = {
+    ADC_SMPR1_SMP_AN3(ADC_SAMPLING_RATE) | ADC_SMPR1_SMP_AN4(ADC_SAMPLING_RATE),
+  },
+  .sqr          = {
+    ADC_SQR1_SQ1_N(ADC_CHANNEL_IN3) | ADC_SQR1_SQ2_N(ADC_CHANNEL_IN4),
+  }
 };
-static const ADCConversionGroup CG_ADC2 = {
-    .circular     = false,
-    .num_channels = 2,
-    .end_cb = ADC2_callback,
-    .cfgr = ADC_RESOLUTION,
-    .smpr = {
-        ADC_SMPR1_SMP_AN3(ADC_SAMPLING_RATE) |
-        ADC_SMPR1_SMP_AN4(ADC_SAMPLING_RATE)
-    },
-    .sqr = {
-        ADC_SQR1_SQ1_N(ADC_CHANNEL_IN3) | ADC_SQR1_SQ2_N(ADC_CHANNEL_IN4)
+
+void initADCGroups() {
+    for (uint8_t i = 0; i < MUXES; i++) {
+        palSetLineMode(mux_pins[i], PAL_MODE_INPUT_ANALOG);
     }
-};
-static const ADCConversionGroup CG_ADC4 = {
-    .circular     = false,
-    .num_channels = 2,
-    .end_cb = ADC4_callback,
-    .cfgr = ADC_RESOLUTION,
-    .smpr = {
-        ADC_SMPR1_SMP_AN3(ADC_SAMPLING_RATE) |
-        ADC_SMPR1_SMP_AN4(ADC_SAMPLING_RATE)
-    },
-    .sqr = {
-        ADC_SQR1_SQ1_N(ADC_CHANNEL_IN3) | ADC_SQR1_SQ2_N(ADC_CHANNEL_IN4)
-    }
+    adcStart(&ADCD1, NULL);
+    adcStart(&ADCD2, NULL);
+    adcStart(&ADCD4, NULL);
+}
+
+void adcStartAllConversions() {
+    chBSemObjectInit(&adcSemaphore, true);
+    completed_conversions = 0;
+
+    adcStartConversion(&ADCD1, &adcConversionGroup, sampleBuffer1, 1);
+    adcStartConversion(&ADCD2, &adcConversionGroup, sampleBuffer2, 1);
+    adcStartConversion(&ADCD4, &adcConversionGroup, sampleBuffer4, 1);
+
+    chBSemWait(&adcSemaphore); // Wait here until all conversions signal completion
 };
 
-void ADC1_callback(ADCDriver *adcp) {
-    if(adcIsBufferComplete(adcp)) {
-        conversion_complete_flags.bits.adc_1 = 1;
-    }
-}
-
-void ADC2_callback(ADCDriver *adcp) {
-    if(adcIsBufferComplete(adcp)) {
-        conversion_complete_flags.bits.adc_2 = 1;
-    }
-}
-
-void ADC4_callback(ADCDriver *adcp) {
-    if(adcIsBufferComplete(adcp)) {
-        conversion_complete_flags.bits.adc_4 = 1;
-    }
-}
-
-void init_custom_analog(void) {
-    palSetPadMode(GPIOA, 2, PAL_MODE_INPUT_ANALOG);
-    palSetPadMode(GPIOA, 3, PAL_MODE_INPUT_ANALOG);
-    palSetPadMode(GPIOA, 6, PAL_MODE_INPUT_ANALOG);
-    palSetPadMode(GPIOA, 7, PAL_MODE_INPUT_ANALOG);
-    palSetPadMode(GPIOB, 12, PAL_MODE_INPUT_ANALOG);
-    palSetPadMode(GPIOB, 14, PAL_MODE_INPUT_ANALOG);
-    adcStart(&ADCD1, &adcCfg);
-    adcStart(&ADCD2, &adcCfg);
-    adcStart(&ADCD4, &adcCfg);
-}
-
-void start_adc_conversions(void) {
-    adcStartConversion(&ADCD1, &CG_ADC1, sample_buffer1, 2);
-    adcStartConversion(&ADCD2, &CG_ADC2, sample_buffer2, 2);
-    adcStartConversion(&ADCD4, &CG_ADC4, sample_buffer4, 2);
-}
-
-bool check_adc_conversion_complete(uint8_t ADC) {
-    uint8_t flags = conversion_complete_flags.value;
-    conversion_complete_flags.value &= ~(1 << (ADC - 1));
-    return flags & (1 << (ADC - 1));
-}
