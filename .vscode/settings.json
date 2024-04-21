@@ -2122,5 +2122,6 @@
         "keyboards/smoll",
         "keyboards/zigotica",
         "keyboards/zsa"
-    ]
+    ],
+    "cmake.sourceDirectory": "/home/jake/qmk_firmware/lib/pico-sdk/src/host/hardware_divider"
 }

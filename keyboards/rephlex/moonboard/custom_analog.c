@@ -40,45 +40,7 @@ void adcErrorCallback(ADCDriver *adcp, adcerror_t err) {
     }
 }
 
-static const ADCConversionGroup adc1ConversionGroup = {
-  .circular     = false,
-  .num_channels = 2U,
-  .end_cb       = adcCompleteCallback,
-  .error_cb     = adcErrorCallback,
-  .cfgr         = ADC_CFGR_CONT | ADC_RESOLUTION,
-  .tr1          = ADC_TR_DISABLED,
-  .tr2          = ADC_TR_DISABLED,
-  .tr3          = ADC_TR_DISABLED,
-  .awd2cr       = 0U,
-  .awd3cr       = 0U,
-  .smpr         = {
-    ADC_SMPR1_SMP_AN3(ADC_SAMPLING_RATE) | ADC_SMPR1_SMP_AN4(ADC_SAMPLING_RATE),
-  },
-  .sqr          = {
-    ADC_SQR1_SQ1_N(ADC_CHANNEL_IN3) | ADC_SQR1_SQ2_N(ADC_CHANNEL_IN4),
-  }
-};
-
-static const ADCConversionGroup adc2ConversionGroup = {
-  .circular     = false,
-  .num_channels = 2U,
-  .end_cb       = adcCompleteCallback,
-  .error_cb     = adcErrorCallback,
-  .cfgr         = ADC_CFGR_CONT | ADC_RESOLUTION,
-  .tr1          = ADC_TR_DISABLED,
-  .tr2          = ADC_TR_DISABLED,
-  .tr3          = ADC_TR_DISABLED,
-  .awd2cr       = 0U,
-  .awd3cr       = 0U,
-  .smpr         = {
-    ADC_SMPR1_SMP_AN3(ADC_SAMPLING_RATE) | ADC_SMPR1_SMP_AN4(ADC_SAMPLING_RATE),
-  },
-  .sqr          = {
-    ADC_SQR1_SQ1_N(ADC_CHANNEL_IN3) | ADC_SQR1_SQ2_N(ADC_CHANNEL_IN4),
-  }
-};
-
-static const ADCConversionGroup adc4ConversionGroup = {
+static const ADCConversionGroup adcConversionGroup = {
   .circular     = false,
   .num_channels = 2U,
   .end_cb       = adcCompleteCallback,
@@ -110,9 +72,9 @@ void adcStartAllConversions() {
     chBSemObjectInit(&adcSemaphore, true);
     completed_conversions = 0;
 
-    adcStartConversion(&ADCD1, &adc1ConversionGroup, sampleBuffer1, 2);
-    adcStartConversion(&ADCD2, &adc2ConversionGroup, sampleBuffer2, 2);
-    adcStartConversion(&ADCD4, &adc4ConversionGroup, sampleBuffer4, 2);
+    adcStartConversion(&ADCD1, &adcConversionGroup, sampleBuffer1, 2);
+    adcStartConversion(&ADCD2, &adcConversionGroup, sampleBuffer2, 2);
+    adcStartConversion(&ADCD4, &adcConversionGroup, sampleBuffer4, 2);
 
     chBSemWait(&adcSemaphore); // Wait here until all conversions signal completion
 };
