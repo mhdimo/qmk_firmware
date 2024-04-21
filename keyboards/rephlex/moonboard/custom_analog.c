@@ -45,7 +45,7 @@ static const ADCConversionGroup adcConversionGroup = {
   .num_channels = 2U,
   .end_cb       = adcCompleteCallback,
   .error_cb     = adcErrorCallback,
-  .cfgr         = ADC_CFGR_CONT | ADC_RESOLUTION,
+  .cfgr         = ADC_RESOLUTION,
   .tr1          = ADC_TR_DISABLED,
   .tr2          = ADC_TR_DISABLED,
   .tr3          = ADC_TR_DISABLED,
@@ -72,9 +72,9 @@ void adcStartAllConversions() {
     chBSemObjectInit(&adcSemaphore, true);
     completed_conversions = 0;
 
-    adcStartConversion(&ADCD1, &adcConversionGroup, sampleBuffer1, 2);
-    adcStartConversion(&ADCD2, &adcConversionGroup, sampleBuffer2, 2);
-    adcStartConversion(&ADCD4, &adcConversionGroup, sampleBuffer4, 2);
+    adcStartConversion(&ADCD1, &adcConversionGroup, sampleBuffer1, 1);
+    adcStartConversion(&ADCD2, &adcConversionGroup, sampleBuffer2, 1);
+    adcStartConversion(&ADCD4, &adcConversionGroup, sampleBuffer4, 1);
 
     chBSemWait(&adcSemaphore); // Wait here until all conversions signal completion
 };
