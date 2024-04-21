@@ -4,5 +4,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 
 #include_next <board.h>
 
-//#undef STM32F303xC
-//#define STM32F303xE
+#define STM32_HSE_BYPASS
+
+#undef STM32F303xC
+#define STM32F303xE
