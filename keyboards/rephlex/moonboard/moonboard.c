@@ -9,6 +9,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "scanfunctions.h"
 #include "print.h"
 #include "multiplexer.h"
+#include "lut.h"
 
 analog_config g_config = {
     .mode = static_actuation,
@@ -30,8 +31,28 @@ void bootmagic_lite(void) {
 #    ifdef DEBUG_ENABLE
 deferred_token debug_token;
 bool debug_print(void) {
-    uprintf("Analog Key 0,0: %d\n", keys[0][0].raw);
-    return false;
+    static char rowBuffer[MATRIX_COLS * 6 + 1]; // +1 for '\0'
+    static char temp[8];
+    static uint8_t row = 0;
+    rowBuffer[0] = '\0'; // Initialize the row buffer
+    for (uint8_t col = 0; col < MATRIX_COLS; col++) {
+        analog_key_t *key = &keys[row][col];
+        if(!key->raw) {
+            snprintf(temp, sizeof(temp), " null   ");
+        } else {
+            snprintf(temp, sizeof(temp), "%5d  ", key->value); // Include a space for separation
+        }
+        strcat(rowBuffer, temp);
+    }
+    strcat(rowBuffer, "\n");
+    uprintf("%s", rowBuffer);
+    row++;
+    if(row >= MATRIX_ROWS) {
+        row = 0;
+        uprintf("\n");
+        return false;
+    }
+    return true;
 }
 
 uint32_t debug_print_callback(uint32_t trigger_time, void *cb_arg) {

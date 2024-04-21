@@ -2,7 +2,7 @@
 #include "print.h"
 #include "multiplexer.h"
 
-#define ADC_SAMPLING_RATE ADC_SMPR_SMP_1P5
+#define ADC_SAMPLING_RATE ADC_SMPR_SMP_2P5
 
 static binary_semaphore_t adcSemaphore;
 static int completed_conversions = 0;
