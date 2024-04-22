@@ -15,15 +15,20 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include <hal.h>
 
 analog_key_t         keys[MATRIX_ROWS][MATRIX_COLS]        = {0};
+static uint16_t pressedAdcValue = {0};
+static uint16_t restAdcValue = {0};
 
 void matrix_init_custom(void) {
     generate_lut();
+    pressedAdcValue = distance_to_adc(255);
+    restAdcValue = distance_to_adc(0);
     multiplexer_init();
     initADCGroups();
     for (uint8_t i = 0; i < 100; i++) {
         get_sensor_offsets();
     }
 }
+
 
 matrix_row_t previous_matrix[MATRIX_ROWS];
 bool matrix_scan_custom(matrix_row_t current_matrix[]) {
@@ -59,7 +64,7 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
                     key->raw = sampleBuffer4[0];
                     break;
             }
-            key->value = MIN((lut[key->raw + key->offset]  * CALIBRATION_RANGE) / lut[1100 + key->offset], 255);
+            key->value = lut[key->raw + key->offset];
             switch (g_config.mode) {
                 case dynamic_actuation:
                     matrix_read_cols_dynamic_actuation(&current_matrix[current_row], current_col, key);

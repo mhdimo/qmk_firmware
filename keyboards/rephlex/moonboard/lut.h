@@ -3,7 +3,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #pragma once
 #include <stdint.h>
 
-extern uint8_t lut[4096];
+extern uint8_t lut[ADC_RESOLUTION_MAX];
 
 uint16_t distance_to_adc(uint8_t distance);
 
