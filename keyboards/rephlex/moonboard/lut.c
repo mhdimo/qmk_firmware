@@ -1,3 +1,5 @@
+/* Copyright 2023 RephlexZero (@RephlexZero)
+SPDX-License-Identifier: GPL-2.0-or-later */
 #include <math.h>
 #include "scanfunctions.h"
 #include "util.h"

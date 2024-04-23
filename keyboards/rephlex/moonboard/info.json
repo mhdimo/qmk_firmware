@@ -12,7 +12,7 @@
     "unicode": true,
     "command": false,
     "nkro": true,
-    "rgb_matrix": true,
+    "rgb_matrix": false,
     "oled": false,
     "deferred_exec": true,
     "audio": false,
@@ -41,8 +41,8 @@
   },
   "rgb_matrix": {
     "driver": "ws2812",
-    "max_brightness": 32,
-    "default_brightness": 30,
+    "max_brightness": 128,
+    "default_brightness": 32,
     "led_count": 81,
     "sleep": true,
     "animations": {

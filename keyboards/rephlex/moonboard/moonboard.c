@@ -40,7 +40,7 @@ bool debug_print(void) {
         if(!key->raw) {
             snprintf(temp, sizeof(temp), " null   ");
         } else {
-            snprintf(temp, sizeof(temp), "%5d  ", key->value); // Include a space for separation
+            snprintf(temp, sizeof(temp), "%5d  ", key->raw); // Include a space for separation
         }
         strcat(rowBuffer, temp);
     }
