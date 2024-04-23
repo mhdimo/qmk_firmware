@@ -13,12 +13,14 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "lut.h"
 #include <ch.h>
 #include <hal.h>
+#include "gpio.h"
 
 analog_key_t         keys[MATRIX_ROWS][MATRIX_COLS]        = {0};
 static uint16_t pressedAdcValue = {0};
 static uint16_t restAdcValue = {0};
 
 void matrix_init_custom(void) {
+    gpio_set_pin_input_high(ENCODER_BUTTON_PIN);
     generate_lut();
     pressedAdcValue = distance_to_adc(255);
     restAdcValue = distance_to_adc(0);
@@ -82,5 +84,7 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
             }
         }
     }
+    // Encoder button scan
+    gpio_read_pin(ENCODER_BUTTON_PIN) ? deregister_key(&current_matrix[1], 14) : register_key(&current_matrix[1], 14);
     return memcmp(previous_matrix, current_matrix, sizeof(previous_matrix)) != 0;
 }
