@@ -6,18 +6,6 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 
 #define ADC_SAMPLING_RATE ADC_SMPR_SMP_2P5
 
-static binary_semaphore_t adcSemaphore;
-static int completed_conversions = 0;
-
-void adcCompleteCallback(ADCDriver *adcp) {
-    osalSysLockFromISR();
-    completed_conversions++;
-    if (completed_conversions == 3) {
-        chBSemSignalI(&adcSemaphore);
-    }
-    osalSysUnlockFromISR();
-}
-
 void adcErrorCallback(ADCDriver *adcp, adcerror_t err) {
     (void)adcp;
     switch (err) {
@@ -45,9 +33,8 @@ void adcErrorCallback(ADCDriver *adcp, adcerror_t err) {
 static const ADCConversionGroup adcConversionGroup = {
   .circular     = false,
   .num_channels = 2U,
-  .end_cb       = adcCompleteCallback,
   .error_cb     = adcErrorCallback,
-  .cfgr         = ADC_RESOLUTION,
+  .cfgr         = ADC_RESOLUTION | ADC_CFGR_CONT,
   .tr1          = ADC_TR_DISABLED,
   .tr2          = ADC_TR_DISABLED,
   .tr3          = ADC_TR_DISABLED,
@@ -70,14 +57,16 @@ void initADCGroups() {
     adcStart(&ADCD4, NULL);
 }
 
-void adcStartAllConversions() {
-    chBSemObjectInit(&adcSemaphore, true);
-    completed_conversions = 0;
+msg_t adcStartAllConversions() {
+    msg_t msg;
 
-    adcStartConversion(&ADCD1, &adcConversionGroup, sampleBuffer1, 1);
-    adcStartConversion(&ADCD2, &adcConversionGroup, sampleBuffer2, 1);
-    adcStartConversion(&ADCD4, &adcConversionGroup, sampleBuffer4, 1);
-
-    chBSemWait(&adcSemaphore); // Wait here until all conversions signal completion
+    osalSysLock();
+    osalDbgAssert(&ADCD1.thread == NULL || &ADCD2.thread == NULL || &ADCD4.thread == NULL, "already waiting");
+    adcStartConversionI(&ADCD1, &adcConversionGroup, sampleBuffer1, 1);
+    adcStartConversionI(&ADCD2, &adcConversionGroup, sampleBuffer2, 1);
+    adcStartConversionI(&ADCD4, &adcConversionGroup, sampleBuffer4, 1);
+    msg = osalThreadSuspendS(&ADCD4.thread);
+    osalSysUnlock();
+    return msg;
 };
 

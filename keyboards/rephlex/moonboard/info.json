@@ -13,9 +13,9 @@
     "command": false,
     "nkro": true,
     "rgb_matrix": true,
-    "oled": false,
+    "oled": true,
     "deferred_exec": true,
-    "audio": false,
+    "audio": true,
     "encoder": true
   },
   "encoder": {
@@ -40,7 +40,7 @@
     "driver": "pwm"
   },
   "rgb_matrix": {
-    "driver": "ws2812",
+    "driver": "ws2812"
     "max_brightness": 128,
     "default_brightness": 32,
     "led_count": 81,

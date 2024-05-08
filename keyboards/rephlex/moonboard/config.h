@@ -48,7 +48,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #define AUDIO_INIT_DELAY 250
 #define AUDIO_DAC_SAMPLE_MAX 4095U
 #define TEMPO_DEFAULT 70
-
+//#define AUDIO_CLICKY
 #define STARTUP_SONG SONG(ZELDA_PUZZLE)
 #define GOODBYE_SONG SONG()
 #endif
