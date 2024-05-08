@@ -29,11 +29,11 @@ void deregister_key(matrix_row_t *current_row, uint8_t current_col) {
 
 void matrix_read_cols_static_actuation(matrix_row_t *current_row, uint8_t current_col, analog_key_t *key) {
     if (*current_row & (1 << current_col)) {
-        if (key->value < MAX(g_config.actuation_point - g_config.release_hysteresis, 0)) {
+        if (key->value <= MAX(g_config.actuation_point - g_config.release_hysteresis, 0)) {
             deregister_key(current_row, current_col);
         }
     } else {
-        if (key->value > MIN(g_config.actuation_point + g_config.press_hysteresis, 255)) {
+        if (key->value >= MIN(g_config.actuation_point + g_config.press_hysteresis, CALIBRATION_RANGE)) {
             register_key(current_row, current_col);
         }
     }
@@ -53,7 +53,7 @@ void matrix_read_cols_dynamic_actuation(matrix_row_t *current_row, uint8_t curre
             Is key still moving down? */
             if (key->value > key->extremum) {
                 update_extremum(key);
-            } else if (key->value < key->extremum - g_config.release_sensitivity) {
+            } else if (key->value <= MAX(key->extremum - g_config.release_sensitivity, 0)) {
                 /* Has key moved up enough to be released? */
                 deregister_key(current_row, current_col);
                 update_extremum(key);
@@ -63,7 +63,7 @@ void matrix_read_cols_dynamic_actuation(matrix_row_t *current_row, uint8_t curre
             Is the key still moving up? */
             if (key->value < key->extremum) {
                 update_extremum(key);
-            } else if (key->value > key->extremum + g_config.press_sensitivity) {
+            } else if (key->value >= MIN(key->extremum + g_config.press_sensitivity, CALIBRATION_RANGE)) {
                 /* Has key moved down enough to be pressed? */
                 register_key(current_row, current_col);
                 update_extremum(key);
@@ -87,7 +87,7 @@ void matrix_read_cols_continuous_dynamic_actuation(matrix_row_t *current_row, ui
             if (key->value > key->extremum) {
                 update_extremum(key);
 
-            } else if (key->value < key->extremum - g_config.release_sensitivity) {
+            } else if (key->value <= MAX(key->extremum - g_config.release_sensitivity, 0)) {
                 /* Has key moved up enough to be released? */
                 deregister_key(current_row, current_col);
                 update_extremum(key);
@@ -97,7 +97,7 @@ void matrix_read_cols_continuous_dynamic_actuation(matrix_row_t *current_row, ui
             Is the key still moving up? */
             if (key->value < key->extremum) {
                 update_extremum(key);
-            } else if (key->value > key->extremum + g_config.press_sensitivity) {
+            } else if (key->value >= MIN(key->extremum + g_config.press_sensitivity, CALIBRATION_RANGE)) {
                 /* Has key moved down enough to be pressed? */
                 register_key(current_row, current_col);
                 update_extremum(key);

@@ -3,8 +3,6 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
-#include <stdlib.h>
-#include "print.h"
 #include "quantum.h"
 #include "custom_analog.h"
 #include "lut.h"
@@ -84,7 +82,16 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
             }
         }
     }
+    bool encoder_button_pressed = gpio_read_pin(ENCODER_BUTTON_PIN);
     // Encoder button scan
-    gpio_read_pin(ENCODER_BUTTON_PIN) ? deregister_key(&current_matrix[1], 14) : register_key(&current_matrix[1], 14);
+    if (current_matrix[1] & (1 << 14)) {
+        if (!encoder_button_pressed) {
+            deregister_key(&current_matrix[1], 14);
+        }
+    } else {
+        if (encoder_button_pressed) {
+            register_key(&current_matrix[1], 14);
+        }
+    }
     return memcmp(previous_matrix, current_matrix, sizeof(previous_matrix)) != 0;
 }
