@@ -7,7 +7,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 
 #pragma once
 
-void adcStartAllConversions(void);
+msg_t adcStartAllConversions(void);
 
 adcsample_t sampleBuffer1[2];
 adcsample_t sampleBuffer2[2];

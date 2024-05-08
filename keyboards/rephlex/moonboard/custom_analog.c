@@ -6,14 +6,16 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 
 #define ADC_SAMPLING_RATE ADC_SMPR_SMP_2P5
 
-static binary_semaphore_t adcSemaphore;
 static int completed_conversions = 0;
 
-void adcCompleteCallback(ADCDriver *adcp) {
+static thread_reference_t waitingThread = NULL;
+
+static void adcCompleteCallback(ADCDriver *adcp) {
     osalSysLockFromISR();
     completed_conversions++;
     if (completed_conversions == 3) {
-        chBSemSignalI(&adcSemaphore);
+        // Manually signal that all ADC conversions are complete
+        osalThreadResumeI(&waitingThread, MSG_OK); // Resume the waiting thread
     }
     osalSysUnlockFromISR();
 }
@@ -70,14 +72,21 @@ void initADCGroups() {
     adcStart(&ADCD4, NULL);
 }
 
-void adcStartAllConversions() {
-    chBSemObjectInit(&adcSemaphore, true);
+msg_t adcStartAllConversions() {
+    msg_t msg;
+    osalSysLock();
     completed_conversions = 0;
 
-    adcStartConversion(&ADCD1, &adcConversionGroup, sampleBuffer1, 1);
-    adcStartConversion(&ADCD2, &adcConversionGroup, sampleBuffer2, 1);
-    adcStartConversion(&ADCD4, &adcConversionGroup, sampleBuffer4, 1);
+    // Save the current thread's pointer to resume later
+    waitingThread = chThdGetSelfX();
 
-    chBSemWait(&adcSemaphore); // Wait here until all conversions signal completion
-};
+    adcStartConversionI(&ADCD1, &adcConversionGroup, sampleBuffer1, 1);
+    adcStartConversionI(&ADCD2, &adcConversionGroup, sampleBuffer2, 1);
+    adcStartConversionI(&ADCD4, &adcConversionGroup, sampleBuffer4, 1);
+
+    // Suspend the current thread until all conversions are complete
+    msg = osalThreadSuspendS(&waitingThread);
+    osalSysUnlock();
+    return msg;
+}
 
