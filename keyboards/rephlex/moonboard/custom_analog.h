@@ -1,16 +1,26 @@
 /* Copyright 2023 RephlexZero (@RephlexZero)
 SPDX-License-Identifier: GPL-2.0-or-later */
-#include <stdint.h>
-#include <stdbool.h>
-#include <hal.h>
-#include <ch.h>
+#ifndef CUSTOM_ANALOG_H
+#define CUSTOM_ANALOG_H
 
-#pragma once
+// Constants
+#define SAMPLE_BUFFER_SIZE 2  // Adjust as necessary
+// Type Definitions
+typedef struct {
+    adcsample_t sampleBuffer1[SAMPLE_BUFFER_SIZE];
+    adcsample_t sampleBuffer2[SAMPLE_BUFFER_SIZE];
+    adcsample_t sampleBuffer4[SAMPLE_BUFFER_SIZE];
+    volatile int completedConversions;
+    thread_reference_t waitingThread;
+} ADCManager;
 
-msg_t adcStartAllConversions(void);
+// Extern ADCManager instance
+extern ADCManager adcManager;
 
-adcsample_t sampleBuffer1[2];
-adcsample_t sampleBuffer2[2];
-adcsample_t sampleBuffer4[2];
+// Function Prototypes
+void initADCGroups(ADCManager *adcManager);
+msg_t adcStartAllConversions(ADCManager *adcManager);
+void adcErrorCallback(ADCDriver *adcp, adcerror_t err);
+adcsample_t getADCSample(const ADCManager *adcManager, uint8_t muxIndex);
 
-void initADCGroups(void);
+#endif // CUSTOM_ANALOG_H

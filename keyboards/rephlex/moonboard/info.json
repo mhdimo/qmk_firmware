@@ -41,7 +41,7 @@
   },
   "rgb_matrix": {
     "driver": "ws2812",
-    "max_brightness": 128,
+    "max_brightness": 255,
     "default_brightness": 32,
     "led_count": 81,
     "sleep": true,
