@@ -9,34 +9,36 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #include "scanfunctions.h"
 #include "print.h"
 #include "multiplexer.h"
+#include "lut.h"
 
-analog_config g_config = {
-    .mode = static_actuation,
-    .actuation_point = 48,
-    .press_sensitivity = 32,
-    .release_sensitivity = 32,
-    .press_hysteresis = 0,
-    .release_hysteresis = 5
-};
+analog_config g_config = {.mode = static_actuation, .actuation_point = 48, .press_sensitivity = 32, .release_sensitivity = 32, .press_hysteresis = 0, .release_hysteresis = 5};
 
 #ifdef BOOTMAGIC_ENABLE
-void bootmagic_lite(void) {
-    // TODO: Add RAW to keystruct?
+void bootmagic_scan(void) {
+    matrix_scan();
+
+    uint16_t threshold = distance_to_adc(CALIBRATION_RANGE / 2);
+    uint16_t raw_value = keys[BOOTMAGIC_ROW][BOOTMAGIC_COLUMN].raw;
+
+    if ((lut_b > 0 && raw_value > threshold) || (lut_b < 0 && raw_value < threshold)) {
+        bootloader_jump();
+    }
 }
 #endif
+
 
 #ifdef DEFERRED_EXEC_ENABLE
 
 #    ifdef DEBUG_ENABLE
 deferred_token debug_token;
-bool debug_print(void) {
-    static char rowBuffer[MATRIX_COLS * 6 + 1]; // +1 for '\0'
-    static char temp[8];
+bool           debug_print(void) {
+    static char    rowBuffer[MATRIX_COLS * 6 + 1]; // +1 for '\0'
+    static char    temp[8];
     static uint8_t row = 0;
-    rowBuffer[0] = '\0'; // Initialize the row buffer
+    rowBuffer[0]       = '\0'; // Initialize the row buffer
     for (uint8_t col = 0; col < MATRIX_COLS; col++) {
         analog_key_t *key = &keys[row][col];
-        if(!key->raw) {
+        if (!key->raw) {
             snprintf(temp, sizeof(temp), " null   ");
         } else {
             snprintf(temp, sizeof(temp), "%5d  ", key->value); // Include a space for separation
@@ -46,7 +48,7 @@ bool debug_print(void) {
     strcat(rowBuffer, "\n");
     uprintf("%s", rowBuffer);
     row++;
-    if(row >= MATRIX_ROWS) {
+    if (row >= MATRIX_ROWS) {
         row = 0;
         uprintf("\n");
         return false;
@@ -207,9 +209,9 @@ bool oled_task_kb() {
 #endif
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  // If console is enabled, it will print the matrix position and status of each key pressed
+    // If console is enabled, it will print the matrix position and status of each key pressed
 #ifdef CONSOLE_ENABLE
     uprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
 #endif
-  return true;
+    return true;
 }

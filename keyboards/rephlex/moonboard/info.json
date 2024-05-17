@@ -5,7 +5,7 @@
   "processor": "STM32F303",
   "bootloader": "stm32-dfu",
   "features": {
-    "bootmagic": false,
+    "bootmagic": true,
     "mousekey": false,
     "extrakey": true,
     "console": true,

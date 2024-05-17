@@ -9,4 +9,5 @@ OPT = 2
 
 AUDIO_DRIVER = dac_basic
 
-#EEPROM_DRIVER = transient
+WEAR_LEVELING_DRIVER = embedded_flash
+
