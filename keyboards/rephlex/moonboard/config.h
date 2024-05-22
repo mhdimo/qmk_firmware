@@ -6,6 +6,8 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #define MATRIX_COLS 15
 
 #define ENCODER_BUTTON_PIN C15
+#define ENCODER_ROW 1
+#define ENCODER_COL 14
 
 #define MUXES 6
 #define MUX_PINS { A2, A3, A6, A7, B12, B14 }

@@ -31,36 +31,38 @@ void bootmagic_scan(void) {
 
 #    ifdef DEBUG_ENABLE
 deferred_token debug_token;
-bool           debug_print(void) {
-    static char    rowBuffer[MATRIX_COLS * 6 + 1]; // +1 for '\0'
-    static char    temp[8];
-    static uint8_t row = 0;
-    rowBuffer[0]       = '\0'; // Initialize the row buffer
+
+bool debug_print(void) {
+    static char rowBuffer[MATRIX_COLS * 8]; // 8: for 7 characters (" null  " or " 12345  ") + '\0'
+    static uint8_t currentRow = 0;
+    char *bufferPtr = rowBuffer;
+
     for (uint8_t col = 0; col < MATRIX_COLS; col++) {
-        analog_key_t *key = &keys[row][col];
-        if (!key->raw) {
-            snprintf(temp, sizeof(temp), " null   ");
+        analog_key_t *key = &keys[currentRow][col];
+        if (key->raw) {
+            bufferPtr += snprintf(bufferPtr, sizeof(rowBuffer) - (bufferPtr - rowBuffer), "%5d  ", key->value);
         } else {
-            snprintf(temp, sizeof(temp), "%5d  ", key->value); // Include a space for separation
+            bufferPtr += snprintf(bufferPtr, sizeof(rowBuffer) - (bufferPtr - rowBuffer), " null   ");
         }
-        strcat(rowBuffer, temp);
     }
-    strcat(rowBuffer, "\n");
-    uprintf("%s", rowBuffer);
-    row++;
-    if (row >= MATRIX_ROWS) {
-        row = 0;
+
+    uprintf("%s\n", rowBuffer);
+    currentRow++;
+
+    if (currentRow >= MATRIX_ROWS) {
+        currentRow = 0;
         uprintf("\n");
         return false;
     }
+
     return true;
 }
 
 uint32_t debug_print_callback(uint32_t trigger_time, void *cb_arg) {
     debug_print();
-    return 100;
+    return 100; // Assuming this is in milliseconds
 }
-#    endif
+#endif
 
 deferred_token idle_recalibrate_token;
 bool           process_record_kb(uint16_t keycode, keyrecord_t *record) {

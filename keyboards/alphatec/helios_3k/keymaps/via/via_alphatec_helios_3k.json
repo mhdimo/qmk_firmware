@@ -1,0 +1,142 @@
+{
+  "name": "AlphaTec/Helios 3k",
+  "vendorId": "0x7272",
+  "productId": "0x7272",
+  "menus": [
+    "qmk_rgb_matrix",
+    {
+      "label": "Dynamic Actuation",
+      "content": [
+        {
+          "label": "Settings",
+          "content": [
+            {
+              "label": "Mode",
+              "type": "dropdown",
+              "options": [
+                [
+                  "Dynamic Actuation",
+                  0
+                ],
+                [
+                  "Continuous Dynamic Actuation",
+                  1
+                ],
+                [
+                  "Static Actuation",
+                  2
+                ],
+                [
+                  "Flashing",
+                  3
+                ]
+              ],
+              "content": [
+                "id_mode",
+                0,
+                1
+              ]
+            },
+            {
+              "label": "Actuation Point",
+              "type": "range",
+              "options": [
+                0,
+                40
+              ],
+              "content": [
+                "id_actuation_point",
+                0,
+                2
+              ]
+            },
+            {
+              "showIf": "{id_mode} <= 1",
+              "label": "Press Sensitivity",
+              "type": "range",
+              "options": [
+                0,
+                40
+              ],
+              "content": [
+                "id_press_sensitivity",
+                0,
+                3
+              ]
+            },
+            {
+              "showIf": "{id_mode} <= 1",
+              "label": "Release Sensitivity",
+              "type": "range",
+              "options": [
+                0,
+                40
+              ],
+              "content": [
+                "id_release_sensitivity",
+                0,
+                4
+              ]
+            },
+            {
+              "showIf": "{id_mode} == 2",
+              "label": "Press Hysteresis",
+              "type": "range",
+              "options": [
+                0,
+                40
+              ],
+              "content": [
+                "id_press_hysteresis",
+                0,
+                5
+              ]
+            },
+            {
+              "showIf": "{id_mode} == 2",
+              "label": "Release Hysteresis",
+              "type": "range",
+              "options": [
+                0,
+                40
+              ],
+              "content": [
+                "id_release_hysteresis",
+                0,
+                6
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "matrix": {
+    "rows": 2,
+    "cols": 3
+  },
+  "layouts": {
+    "keymap": [
+      [
+        "0,0",
+        "0,1",
+        "0,2"
+      ],
+      [
+        {
+          "y": 1,
+          "x": 0.75,
+          "w": 0.5,
+          "h": 0.5
+        },
+        "1,0",
+        {
+          "x": 0.5,
+          "w": 0.5,
+          "h": 0.5
+        },
+        "1,2"
+      ]
+    ]
+  }
+}
