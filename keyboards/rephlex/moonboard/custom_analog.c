@@ -1,5 +1,6 @@
 /* Copyright 2023 RephlexZero (@RephlexZero)
 SPDX-License-Identifier: GPL-2.0-or-later */
+
 #include "custom_analog.h"
 #include "print.h"
 #include "multiplexer.h"
@@ -12,8 +13,7 @@ static void adcCompleteCallback(ADCDriver *adcp) {
     osalSysLockFromISR();
     adcManager.completedConversions++;
     if (adcManager.completedConversions == 3) {
-        osalThreadResumeI(&adcManager.waitingThread, MSG_OK); // Resume the waiting thread
-        adcManager.waitingThread = NULL; // Reset the waitingThread reference
+        chSemSignalI(&adcManager.sem); // Signal the semaphore
     }
     osalSysUnlockFromISR();
 }
@@ -65,7 +65,7 @@ static const ADCConversionGroup adcConversionGroup = {
 
 void initADCGroups(ADCManager *adcManager) {
     adcManager->completedConversions = 0;
-    adcManager->waitingThread = NULL;
+    chSemObjectInit(&adcManager->sem, 0); // Initialize semaphore with a count of 0
     for (uint8_t i = 0; i < MUXES; i++) {
         palSetLineMode(mux_pins[i], PAL_MODE_INPUT_ANALOG);
     }
@@ -75,21 +75,19 @@ void initADCGroups(ADCManager *adcManager) {
 }
 
 msg_t adcStartAllConversions(ADCManager *adcManager) {
-    msg_t msg;
     osalSysLock();
     adcManager->completedConversions = 0;
 
-    // Save the current thread's pointer to resume later
-    adcManager->waitingThread = chThdGetSelfX();
-
+    // Start conversions on multiple ADCs
     adcStartConversionI(&ADCD1, &adcConversionGroup, adcManager->sampleBuffer1, 1);
     adcStartConversionI(&ADCD2, &adcConversionGroup, adcManager->sampleBuffer2, 1);
     adcStartConversionI(&ADCD4, &adcConversionGroup, adcManager->sampleBuffer4, 1);
 
-    // Suspend the current thread until all conversions are complete
-    msg = osalThreadSuspendS(&adcManager->waitingThread);
     osalSysUnlock();
-    return msg;
+
+    chSemWaitTimeout(&adcManager->sem, TIME_INFINITE);
+
+    return MSG_OK;
 }
 
 adcsample_t getADCSample(const ADCManager *adcManager, uint8_t muxIndex) {

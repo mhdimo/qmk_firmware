@@ -1,17 +1,22 @@
 /* Copyright 2023 RephlexZero (@RephlexZero)
 SPDX-License-Identifier: GPL-2.0-or-later */
+
 #ifndef CUSTOM_ANALOG_H
 #define CUSTOM_ANALOG_H
 
+#include "hal.h"
+
 // Constants
 #define SAMPLE_BUFFER_SIZE 2  // Adjust as necessary
+#define MUXES 6  // Number of multiplexer lines, adjust as necessary
+
 // Type Definitions
 typedef struct {
     adcsample_t sampleBuffer1[SAMPLE_BUFFER_SIZE];
     adcsample_t sampleBuffer2[SAMPLE_BUFFER_SIZE];
     adcsample_t sampleBuffer4[SAMPLE_BUFFER_SIZE];
     volatile int completedConversions;
-    thread_reference_t waitingThread;
+    semaphore_t sem;
 } ADCManager;
 
 // Extern ADCManager instance
