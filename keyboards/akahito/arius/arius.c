@@ -13,8 +13,8 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 
 analog_config g_config = {.mode = static_actuation, .actuation_point = 48, .press_sensitivity = 32, .release_sensitivity = 32, .press_hysteresis = 0, .release_hysteresis = 5};
 
-// #ifdef BOOTMAGIC_ENABLE
-// void bootmagic_scan(void) {
+#ifdef BOOTMAGIC_ENABLE
+void bootmagic_scan(void) {
 //     matrix_scan();
 // 
 //     uint16_t threshold = distance_to_adc(CALIBRATION_RANGE / 2);
@@ -23,8 +23,8 @@ analog_config g_config = {.mode = static_actuation, .actuation_point = 48, .pres
 //     if ((lut_b > 0 && raw_value > threshold) || (lut_b < 0 && raw_value < threshold)) {
 //         bootloader_jump();
 //     }
-// }
-// #endif
+}
+ #endif
 
 
 #ifdef DEFERRED_EXEC_ENABLE

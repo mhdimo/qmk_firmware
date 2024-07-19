@@ -8,7 +8,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 #define MUXES 6
 #define MUX_PINS { A2, A3, A5, A7, B12, B14 }
 #define MUX_SELECTOR_BITS 4
-#define MUX_SELECTOR_PINS { B11, B10, B1, B2 }
+#define MUX_SELECTOR_PINS { B5, B4, B3, A15 }
 
 #define MUX_CHANNELS ( 1 << MUX_SELECTOR_BITS )
 

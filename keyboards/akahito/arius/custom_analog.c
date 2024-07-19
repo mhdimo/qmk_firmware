@@ -63,6 +63,25 @@ static const ADCConversionGroup adcConversionGroup = {
     }
 };
 
+static const ADCConversionGroup adcConversionGroupADC2 = {
+    .circular     = false,
+    .num_channels = 2U,
+    .end_cb       = adcCompleteCallback,
+    .error_cb     = adcErrorCallback,
+    .cfgr         = ADC_RESOLUTION,
+    .tr1          = ADC_TR_DISABLED,
+    .tr2          = ADC_TR_DISABLED,
+    .tr3          = ADC_TR_DISABLED,
+    .awd2cr       = 0U,
+    .awd3cr       = 0U,
+    .smpr         = {
+        ADC_SMPR1_SMP_AN2(ADC_SAMPLING_TIME) | ADC_SMPR1_SMP_AN4(ADC_SAMPLING_TIME),
+    },
+    .sqr          = {
+        ADC_SQR1_SQ1_N(ADC_CHANNEL_IN2) | ADC_SQR1_SQ2_N(ADC_CHANNEL_IN4),
+    }
+};
+
 void initADCGroups(ADCManager *adcManager) {
     adcManager->completedConversions = 0;
     adcManager->waitingThread = NULL;
@@ -83,7 +102,7 @@ msg_t adcStartAllConversions(ADCManager *adcManager) {
     adcManager->waitingThread = chThdGetSelfX();
 
     adcStartConversionI(&ADCD1, &adcConversionGroup, adcManager->sampleBuffer1, 1);
-    adcStartConversionI(&ADCD2, &adcConversionGroup, adcManager->sampleBuffer2, 1);
+    adcStartConversionI(&ADCD2, &adcConversionGroupADC2, adcManager->sampleBuffer2, 1);
     adcStartConversionI(&ADCD4, &adcConversionGroup, adcManager->sampleBuffer4, 1);
 
     // Suspend the current thread until all conversions are complete
