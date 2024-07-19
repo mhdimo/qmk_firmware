@@ -15,7 +15,7 @@ analog_config g_config = {.mode = static_actuation, .actuation_point = 48, .pres
 
 #ifdef BOOTMAGIC_ENABLE
 void bootmagic_scan(void) {
-//     matrix_scan();
+    matrix_scan();
 // 
 //     uint16_t threshold = distance_to_adc(CALIBRATION_RANGE / 2);
 //     uint16_t raw_value = keys[BOOTMAGIC_ROW][BOOTMAGIC_COLUMN].raw;

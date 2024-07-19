@@ -27,8 +27,8 @@
     },
     "usb": {
       "device_version": "1.0.0",
-      "pid": "0xDF11",
-      "vid": "0x0483"
+      "pid": "0xAC27",
+      "vid": "0x0727"
     },
     "layouts": {
         "LAYOUT_tkl_ansi_wkl": {
