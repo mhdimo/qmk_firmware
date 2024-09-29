@@ -12,9 +12,8 @@ static void adcCompleteCallback(ADCDriver *adcp) {
     osalSysLockFromISR();
     adcManager.completedConversions++;
     if (adcManager.completedConversions == 3) {
-        osalThreadResumeI(&adcManager.waitingThread, MSG_OK); // Resume the waiting thread
-        adcManager.waitingThread = NULL; // Reset the waitingThread reference
-    }
+        chSemSignalI(&adcManager.sem); // Signal the semaphore
+     }
     osalSysUnlockFromISR();
 }
 
@@ -84,7 +83,7 @@ static const ADCConversionGroup adcConversionGroupADC2 = {
 
 void initADCGroups(ADCManager *adcManager) {
     adcManager->completedConversions = 0;
-    adcManager->waitingThread = NULL;
+    chSemObjectInit(&adcManager->sem, 0); // Initialize semaphore with a count of 0
     for (uint8_t i = 0; i < MUXES; i++) {
         palSetLineMode(mux_pins[i], PAL_MODE_INPUT_ANALOG);
     }
@@ -94,21 +93,19 @@ void initADCGroups(ADCManager *adcManager) {
 }
 
 msg_t adcStartAllConversions(ADCManager *adcManager) {
-    msg_t msg;
     osalSysLock();
     adcManager->completedConversions = 0;
 
-    // Save the current thread's pointer to resume later
-    adcManager->waitingThread = chThdGetSelfX();
-
-    adcStartConversionI(&ADCD1, &adcConversionGroup, adcManager->sampleBuffer1, 1);
+    // Start conversions on multiple ADCs
+     adcStartConversionI(&ADCD1, &adcConversionGroup, adcManager->sampleBuffer1, 1);
     adcStartConversionI(&ADCD2, &adcConversionGroupADC2, adcManager->sampleBuffer2, 1);
     adcStartConversionI(&ADCD4, &adcConversionGroup, adcManager->sampleBuffer4, 1);
 
-    // Suspend the current thread until all conversions are complete
-    msg = osalThreadSuspendS(&adcManager->waitingThread);
     osalSysUnlock();
-    return msg;
+
+    chSemWaitTimeout(&adcManager->sem, TIME_INFINITE);
+
+    return MSG_OK;
 }
 
 adcsample_t getADCSample(const ADCManager *adcManager, uint8_t muxIndex) {
@@ -122,9 +119,9 @@ adcsample_t getADCSample(const ADCManager *adcManager, uint8_t muxIndex) {
         case 3:
             return adcManager->sampleBuffer2[1];
         case 4:
-            return adcManager->sampleBuffer4[1]; // SWAPPED!!!
+            return adcManager->sampleBuffer4[0]; // SWAPPED!!!
         case 5:
-            return adcManager->sampleBuffer4[0];
+            return adcManager->sampleBuffer4[1];
         default:
             return 0; // Invalid index
     }

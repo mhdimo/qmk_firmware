@@ -15,10 +15,10 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 // const double lut_d = 1966.74076381;
 
 /* Equation parameters for the sensor-magnet linearity mapping */
-const double lut_a = 16654600.6755; // Lekker
-const double lut_b = -0.00955994866577;
-const double lut_c = -1278.75103145;
-const double lut_d = 16652478.4163;
+const double lut_a = -0.199387840342; // Latenpow
+const double lut_b = 0.00955994866575;
+const double lut_c = 6.0159062407;
+const double lut_d = 2122.25923605;
 
 uint16_t distance_to_adc(uint8_t distance) {
 
